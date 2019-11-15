@@ -1,4 +1,4 @@
-package com.bosic.springboot.demo.myfirstapp.food;
+package com.bosic.springboot.demo.myfirstapp.model;
 
 import java.util.List;
 

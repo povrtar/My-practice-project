@@ -2,18 +2,23 @@ package com.myperssonal.demo.rest;
 
 public class CustomerNotFoundException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public CustomerNotFoundException() {
-		
+
 	}
 
 	public CustomerNotFoundException(String arg0) {
 		super(arg0);
-		
+
 	}
 
 	public CustomerNotFoundException(Throwable arg0) {
 		super(arg0);
-	
+
 	}
 
 	public CustomerNotFoundException(String arg0, Throwable arg1) {

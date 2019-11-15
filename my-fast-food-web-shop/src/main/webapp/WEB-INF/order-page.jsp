@@ -3,8 +3,8 @@
 	
 	<div class="container">
 	<div>
-			<a type="button" class="btn btn-success" href="/add-drink">Add Drink</a>
-			<a class="btn btn-success" href="/add-pizza">Add Pizza</a>
+			<a type="button" class="btn btn-success" href="/add-order/drinks">Add Drink</a>
+			<a class="btn btn-success" href="/add-order/pizzas">Add Pizza</a>
 			
 		</div>
 		<table class="table table-striped">

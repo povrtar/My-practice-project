@@ -9,22 +9,24 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.bosic.springboot.demo.myfirstapp.entity.Customer;
-import com.bosic.springboot.demo.myfirstapp.food.Product;
+import com.bosic.springboot.demo.myfirstapp.model.Customer;
 import com.bosic.springboot.demo.myfirstapp.service.CustomerService;
 
 @Controller
 public class CustomerController {
-@Autowired
-CustomerService customerService;
-@GetMapping("/addcustomer")
-public String addCustomerForm(ModelMap model) {
-model.addAttribute("customer",new Customer());
-return "login";}
-@PostMapping("/addcustomer")
-public String addCustomer(ModelMap model, @Valid Customer customer, BindingResult result) {
+	@Autowired
+	private CustomerService customerService;
 
-customerService.addCustomer(customer);
-model.addAttribute("customerList",customerService.getCustomers());
-return "customer-list";}
+	@GetMapping("/customers")
+	public String getCustomers(ModelMap model) {
+		model.addAttribute("customer", new Customer());
+		return "login";
+	}
+
+	@PostMapping("/customers")
+	public String addCustomer(ModelMap model, @Valid Customer customer, BindingResult result) {
+		customerService.addCustomer(customer);
+		model.addAttribute("customerList", customerService.getCustomers());
+		return "customer-list";
+	}
 }
