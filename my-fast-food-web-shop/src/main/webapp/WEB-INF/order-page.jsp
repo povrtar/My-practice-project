@@ -32,7 +32,7 @@
 						
 						<td></td>
 						
-						<td><a type="button" class="btn btn-warning"
+						<td><a  type="button" class="btn btn-warning"
 							href="/delete-prod?id=${prod.id}">Delete</a></td>
 					</tr>
 				</c:forEach>

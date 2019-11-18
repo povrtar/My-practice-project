@@ -33,10 +33,9 @@ public class LogoutController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		String name = getLoggedInUserName(model);
-
-		logger.info("User is " + name);
 		
-		shoppingCardService.saveCard(service.getProductList(), name);
+		logger.info("User is " + name);
+		shoppingCardService.addCard(service.getProductList(), name);
 		logger.info("Total = "+shoppingCardService.getTotal(service.getProductList()));
 		service.cleanProductList();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -44,17 +43,14 @@ public class LogoutController {
 		if (authentication != null) {
 			new SecurityContextLogoutHandler().logout(request, response, authentication);
 		}
-
 		return "redirect:/";
 	}
 
 	private String getLoggedInUserName(ModelMap model) {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
 		if (principal instanceof UserDetails) {
 			return ((UserDetails) principal).getUsername();
 		}
-
 		return principal.toString();
 	}
 }

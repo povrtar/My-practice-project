@@ -9,21 +9,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import org.springframework.web.bind.annotation.PostMapping;
-
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.bosic.springboot.demo.myfirstapp.model.Drink;
 import com.bosic.springboot.demo.myfirstapp.model.Pizza;
 import com.bosic.springboot.demo.myfirstapp.service.ProductService;
 
 @Controller
-
 public class OrderController {
-	
 
 	@Autowired
 	private ProductService service;
@@ -36,11 +30,9 @@ public class OrderController {
 
 	private String getLoggedInUserName(ModelMap model) {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
 		if (principal instanceof UserDetails) {
 			return ((UserDetails) principal).getUsername();
 		}
-
 		return principal.toString();
 	}
 
@@ -51,7 +43,6 @@ public class OrderController {
 		model.put("productList", service.getProductList());
 		model.put("total", service.getTotal());
 		model.put("name", name);
-
 		return "order-page";
 	}
 
@@ -64,18 +55,13 @@ public class OrderController {
 
 	@PostMapping("/add-order/pizzas")
 	public String inputPizza(ModelMap model, @Valid Pizza pizza, BindingResult result) {
-
 		service.addProduct(pizza);
-
-		
-
 		return "redirect:/orders";
 	}
 
 	@GetMapping("/add-order/drinks")
 	public String addDrink(ModelMap model) {
 		model.addAttribute("product", new Drink());
-
 		return "drink";
 	}
 
@@ -84,20 +70,15 @@ public class OrderController {
 		if (result.hasErrors()) {
 			return ("drink");
 		}
-
 		service.addProduct(drink);
-
-		
-
 		return "redirect:/orders";
 	}
 
-	@DeleteMapping("/delete-prod")
+	@GetMapping("/delete-prod")//this is mapped on GET method because I don`t know how to add method="DELETE" to delete button in HTML form 
 	public String deleteProd(@RequestParam int id) {
 		if (service.getProdById(id).equals(null))
 			throw new RuntimeException("Something went wrong!!!");
-		
-		service.deleteProd(id);
+		service.deleteProduct(id);
 		return "redirect:/orders";
 	}
 
