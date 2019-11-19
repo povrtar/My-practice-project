@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.bosic.springboot.demo.myfirstapp.model.Customer;
 import com.bosic.springboot.demo.myfirstapp.model.Pizza;
 import com.bosic.springboot.demo.myfirstapp.model.Product;
@@ -25,14 +23,14 @@ public class ShoppingCardService {
 	private Customer customer = new Customer();
 	private static int counter = 0;
 	private static List<ShoppingCard> listOfCards = new ArrayList<>();
-	Logger logger=LoggerFactory.getLogger(getClass());
+	Logger logger = LoggerFactory.getLogger(getClass());
 
 	public void addCard(List<Product> list, String name) {
 		customer = customerService.getCustomerByName(name);
 		listOfCards.add(new ShoppingCard(counter++, list, customer, getCurrentTimeStamp(), getTotal(list)));
-		for(ShoppingCard card:listOfCards) {
-			logger.info("in addCard method"+card.getProductList().toString());
-			}
+		for (ShoppingCard card : listOfCards) {
+			logger.info("in addCard method" + card.getProductList().toString());
+		}
 	}
 
 	public double getTotal(List<Product> list) {
@@ -46,12 +44,10 @@ public class ShoppingCardService {
 	}
 
 	public List<ShoppingCard> getCardsForDate(String date) {// date is in "yyyy-MM-dd" format
-		Stream<ShoppingCard> allCards = listOfCards.stream();		
+		Stream<ShoppingCard> allCards = listOfCards.stream();
 		List<ShoppingCard> dailyCards = allCards.filter(card -> card.getDate().equals(date))
-				.collect(Collectors.toList());		
-		for(ShoppingCard card:listOfCards) {
-			logger.info("in getCardsForDate method "+card.getProductList().toString());
-			}
+				.collect(Collectors.toList());
+
 		return dailyCards;
 	}
 
@@ -65,21 +61,21 @@ public class ShoppingCardService {
 	}
 
 	public long howManyPizzasForDate(String date) {// date is in "yyyy-MM-dd" format
-		List<ShoppingCard> cards=getCardsForDate(date);
-		long all=0;
-		
-		for(ShoppingCard card:cards) {
-			List<Product> dailyProducts =card.getProductList();
-			long count=0;
+		for (ShoppingCard card : listOfCards) {
+			logger.info("in getCardsForDate method " + card.getProductList().toString());
+		}
+		List<ShoppingCard> cards = getCardsForDate(date);
+		long all = 0;
+
+		for (ShoppingCard card : cards) {
+			List<Product> dailyProducts = card.getProductList();
+			long count = 0;
 			count = dailyProducts.stream().filter(prod -> prod instanceof Pizza).collect(Collectors.counting());
 			all = all + count;
-		}return all;
 		}
-	
-		
-   
-		
-		
+		return all;
+	}
+
 	public int getCounter() {
 		return counter;
 	}

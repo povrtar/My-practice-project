@@ -75,7 +75,7 @@ public class OrderController {
 	}
 
 	@GetMapping("/delete-prod")//this is mapped on GET method because I don`t know how to add method="DELETE" to delete button in HTML form 
-	public String deleteProd(@RequestParam int id) {
+	public String deleteProduct(@RequestParam int id) {
 		if (service.getProdById(id).equals(null))
 			throw new RuntimeException("Something went wrong!!!");
 		service.deleteProduct(id);
