@@ -30,7 +30,6 @@ public class BookRestController {
 	@GetMapping("/books/{bookId}")
 	public Book getBook(@PathVariable String bookId) {
 		int id = Integer.valueOf(bookId);
-
 		Book theBook = bookService.getBook(id);
 		if (theBook == null) {
 			throw new CustomerNotFoundException("Book not founded for id: " + bookId);
@@ -60,9 +59,7 @@ public class BookRestController {
 	 */
 	@PutMapping("/save")
 	public Book updateBook(@RequestBody Book theBook) {
-
 		bookService.saveBook(theBook);
-
 		return theBook;
 	}
 
@@ -81,7 +78,6 @@ public class BookRestController {
 	@GetMapping("/byautor/{lastName}")
 	public List<Book> getBooksByAutor(@PathVariable String lastName) {
 		List<Book> theBooks = bookService.getBooksByAutor(lastName);
-
 		if (theBooks.size() == 0) {
 			throw new CustomerNotFoundException("Book writen by " + lastName + "  not founded !!!");
 		}

@@ -18,12 +18,11 @@ private BookDAO bookDao;
 public BookServiceImpl(BookDAO theBookDAO) {
 	bookDao=theBookDAO;
 }
+
 	@Override
 	@Transactional
 	public void saveBook(Book theBook) {
-		
-	
-bookDao.saveBook(theBook);
+		bookDao.saveBook(theBook);
 	}
 
 	@Override
@@ -39,13 +38,14 @@ bookDao.saveBook(theBook);
 		// TODO Auto-generated method stub
 bookDao.deleteBook(theId);
 	}
+	
 	@Override
 	public List<Book> getBooksByTitle(String title) {
 		return bookDao.getBookByTitle(title);
 	}
+	
 	@Override
-	public List<Book> getBooksByAutor(String lastName) {
-		
+	public List<Book> getBooksByAutor(String lastName) {		
 		return bookDao.getBooksByAutor( lastName);
 	}
 

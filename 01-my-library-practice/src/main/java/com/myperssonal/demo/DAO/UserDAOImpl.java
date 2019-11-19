@@ -22,8 +22,6 @@ public UserDAOImpl(EntityManager theEntityManager) {
 	@Override
 	public User getUserbyId(int theId) {
 Session currentSession = entityManager.unwrap(Session.class);
-		
-		// now retrieve/read from database using the primary key
 		User theUser = currentSession.get(User.class, theId);
 		return theUser;
 	}
@@ -31,61 +29,41 @@ Session currentSession = entityManager.unwrap(Session.class);
 	@Override
 	public List<User> getUsers() {
 		Session currentSession =entityManager.unwrap(Session.class);
-		
-		// create a query  ... sort by last name
 		Query<User> theQuery = 
 				currentSession.createQuery("from User order by name",
 											User.class);
-		
-		// execute query and get result list
-		List<User> users = theQuery.getResultList();
-				
-		// return the results		
+		List<User> users = theQuery.getResultList();		
 		return users;
 	}
 
 	@Override
 	public void saveUser(User theUser) {
 		
-Session currentSession = entityManager.unwrap(Session.class);
-		
-		
-		currentSession.saveOrUpdate(theUser);
-		
+Session currentSession = entityManager.unwrap(Session.class);				
+		currentSession.saveOrUpdate(theUser);		
 	}
 
 	@Override
 	public List<User> getUsersByName(String name) {
 		Session currentSession =entityManager.unwrap(Session.class);
-		
-		// create a query  ... sort by last name
 		Query<User> theQuery = 
 				currentSession.createQuery("from User order by name",
 											User.class);
-		
-		// execute query and get result list
 		List<User> users = theQuery.getResultList();
 		List<User> usersByName=new ArrayList<>();
 		for(User user:users) {
 			if((name.equals(user.getName()))) {
 				usersByName.add(user);
 			}
-		}
-		// return the results		
+		}		
 		return usersByName;
 	}
+	
 	@Override
 	public void deleteUser(int theId) {
-Session currentSession = entityManager.unwrap(Session.class);
-		
-		
-Query theQuery = 
-currentSession.createQuery("delete from User where id=:userId");
-theQuery.setParameter("userId", theId);
-
-theQuery.executeUpdate();	
-
-		
+		Session currentSession = entityManager.unwrap(Session.class);
+		Query theQuery = currentSession.createQuery("delete from User where id=:userId");
+		theQuery.setParameter("userId", theId);
+		theQuery.executeUpdate();
 	}
-
 }

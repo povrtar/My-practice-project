@@ -10,28 +10,24 @@ import org.springframework.stereotype.Service;
 import com.myperssonal.demo.DAO.UserDAO;
 import com.myperssonal.demo.entity.User;
 @Service
-
 public class UserServiceImpl implements UserService{
 @Autowired
 UserDAO userDao;
 	@Override
 	@Transactional
-	public List<User> getUsers() {
-		
+	public List<User> getUsers() {		
 		return userDao.getUsers();
 	}
 
 	@Override
 	@Transactional
 	public User getUserById(int id) {
-	return	userDao.getUserbyId(id);
-		
+	return	userDao.getUserbyId(id);		
 	}
 
 	@Override
 	@Transactional
-	public List<User> getUsersByName(String name) {
-		
+	public List<User> getUsersByName(String name) {		
 		return userDao.getUsersByName(name);
 	}
 
@@ -45,7 +41,5 @@ UserDAO userDao;
 	@Transactional
 	public void deleteUser(int userId) {
 		userDao.deleteUser(userId);
-		
 	}
-
 }

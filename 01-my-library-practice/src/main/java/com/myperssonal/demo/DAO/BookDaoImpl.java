@@ -36,8 +36,6 @@ public class BookDaoImpl implements BookDAO {
 	@Override
 	public Book getBook(int theId) {
 		Session currentSession = theEntityManager.unwrap(Session.class);
-
-		// now retrieve/read from database using the primary key
 		Book theBook = currentSession.get(Book.class, theId);
 		return theBook;
 	}
@@ -45,23 +43,15 @@ public class BookDaoImpl implements BookDAO {
 	@Override
 	public void deleteBook(int theId) {
 		Session currentSession = theEntityManager.unwrap(Session.class);
-
 		Query theQuery = currentSession.createQuery("delete from Book where id=:bookId");
 		theQuery.setParameter("bookId", theId);
-
 		theQuery.executeUpdate();
 	}
 
 	@Override
 	public List<Book> getBookByTitle(String title) {
-
-		// get the current hibernate session
 		Session currentSession = theEntityManager.unwrap(Session.class);
-
-		// create a query ... sort by last name
 		Query<Book> theQuery = currentSession.createQuery("from Book order by autorLastName", Book.class);
-
-		// execute query and get result list
 		List<Book> books = theQuery.getResultList();
 		List<Book> booksWithTitle = new ArrayList<>();
 		for (Book book : books) {
@@ -69,19 +59,13 @@ public class BookDaoImpl implements BookDAO {
 				booksWithTitle.add(book);
 			}
 		}
-		// return the results
 		return booksWithTitle;
 	}
 
 	@Override
 	public List<Book> getBooksByAutor(String lastName) {
-		// get the current hibernate session
 		Session currentSession = theEntityManager.unwrap(Session.class);
-
-		// create a query ... sort by last name
 		Query<Book> theQuery = currentSession.createQuery("from Book order by autorLastName", Book.class);
-
-		// execute query and get result list
 		List<Book> books = theQuery.getResultList();
 		List<Book> booksOfAutor = new ArrayList<>();
 		for (Book book : books) {
@@ -89,7 +73,6 @@ public class BookDaoImpl implements BookDAO {
 				booksOfAutor.add(book);
 			}
 		}
-		// return the results
 		return booksOfAutor;
 	}
 
