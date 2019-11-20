@@ -23,14 +23,14 @@ public class ShoppingCardService {
 	private Customer customer = new Customer();
 	private static int counter = 0;
 	private static List<ShoppingCard> listOfCards = new ArrayList<>();
+	List<Product> list=new ArrayList<>();
 	Logger logger = LoggerFactory.getLogger(getClass());
 
-	public void addCard(List<Product> list, String name) {
+	public void addCard(List<Product> inputList, String name) {
+		list.clear();
+		this.list.addAll(inputList);
 		customer = customerService.getCustomerByName(name);
 		listOfCards.add(new ShoppingCard(counter++, list, customer, getCurrentTimeStamp(), getTotal(list)));
-		for (ShoppingCard card : listOfCards) {
-			logger.info("in addCard method" + card.getProductList().toString());
-		}
 	}
 
 	public double getTotal(List<Product> list) {
@@ -61,9 +61,6 @@ public class ShoppingCardService {
 	}
 
 	public long howManyPizzasForDate(String date) {// date is in "yyyy-MM-dd" format
-		for (ShoppingCard card : listOfCards) {
-			logger.info("in getCardsForDate method " + card.getProductList().toString());
-		}
 		List<ShoppingCard> cards = getCardsForDate(date);
 		long all = 0;
 
