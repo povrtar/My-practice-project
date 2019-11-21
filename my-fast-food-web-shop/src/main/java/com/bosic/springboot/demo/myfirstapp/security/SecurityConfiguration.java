@@ -1,11 +1,14 @@
 package com.bosic.springboot.demo.myfirstapp.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Configuration
@@ -29,4 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers("/customers", "/managerPage").access("hasRole('ADMIN')").and()
                 .formLogin();
     }
+	@Bean(name="passwordEncoder")
+	public PasswordEncoder passwordncoder() {
+		return new BCryptPasswordEncoder();
+	}
 }

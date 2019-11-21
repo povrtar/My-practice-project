@@ -43,8 +43,8 @@ public class UserRestController {
 	@PostMapping("/users/")
 	public User addUser(@RequestBody User theUser) {
 		theUser.setId(0);
-		if (theUser.getName() == null) {
-			throw new RuntimeException("User must have a name!!!");
+		if (theUser.getName() == null || theUser.getPassword()==null || theUser.getRole()==null) {
+			throw new RuntimeException("User must have a name.password and role!!!");
 		}
 		userService.saveUser(theUser);
 		return theUser;

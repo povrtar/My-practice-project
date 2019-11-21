@@ -19,13 +19,8 @@ import com.myperssonal.demo.service.BookService;
 @RestController
 @RequestMapping("/api")
 public class BookRestController {
-
+    @Autowired
 	BookService bookService;
-
-	@Autowired
-	public BookRestController(BookService theBookService) {
-		bookService = theBookService;
-	}
 
 	@GetMapping("/books/{bookId}")
 	public Book getBook(@PathVariable String bookId) {
@@ -37,7 +32,7 @@ public class BookRestController {
 		return theBook;
 	}
 
-	@GetMapping("/bytitle/{title}")
+	@GetMapping("/books/bytitle/{title}")
 	public List<Book> getBooksByTitle(@PathVariable String title) {
 		List<Book> theBooks = bookService.getBooksByTitle(title);
 		System.out.println("Nece da pridje");
@@ -57,7 +52,7 @@ public class BookRestController {
 	 * 
 	 * return theBook; }
 	 */
-	@PutMapping("/save")
+	@PutMapping("/service/books")
 	public Book updateBook(@RequestBody Book theBook) {
 		bookService.saveBook(theBook);
 		return theBook;
@@ -75,7 +70,7 @@ public class BookRestController {
 		return theBook;
 	}
 
-	@GetMapping("/byautor/{lastName}")
+	@GetMapping("/books/byautor/{lastName}")
 	public List<Book> getBooksByAutor(@PathVariable String lastName) {
 		List<Book> theBooks = bookService.getBooksByAutor(lastName);
 		if (theBooks.size() == 0) {

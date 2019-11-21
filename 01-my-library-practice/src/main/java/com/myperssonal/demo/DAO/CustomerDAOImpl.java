@@ -16,11 +16,8 @@ import com.myperssonal.demo.entity.Customer;
 
 @Repository
 public class CustomerDAOImpl implements CustomerDAO {
-	private EntityManager entityManager;
 	@Autowired
-	public CustomerDAOImpl(EntityManager theEntityManager) {
-		entityManager=theEntityManager;
-	}
+	private EntityManager entityManager;
 			
 	@Override
 	public List<Customer> getCustomers() {

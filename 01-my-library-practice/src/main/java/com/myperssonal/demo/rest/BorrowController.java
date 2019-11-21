@@ -14,12 +14,8 @@ import com.myperssonal.demo.service.BorrowService;
 @RestController
 @RequestMapping("/api")
 public class BorrowController {
-	BorrowService borrowService;
-
 	@Autowired
-	public BorrowController(BorrowService theBorrowService) {
-		borrowService = theBorrowService;
-	}
+	BorrowService borrowService;
 
 	@PostMapping("/borrow")
 	public void borrowBook(@RequestBody BorrowBook theBorrow) {

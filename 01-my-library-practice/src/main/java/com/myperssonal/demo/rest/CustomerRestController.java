@@ -18,14 +18,9 @@ import com.myperssonal.demo.service.CustomerService;
 @RestController
 @RequestMapping("/api")
 public class CustomerRestController {
-
+    @Autowired
 	CustomerService customerService;
-
-	@Autowired
-	public CustomerRestController(CustomerService theCustomerService) {
-		customerService = theCustomerService;
-	}
-
+    
 	@GetMapping("/customers")
 	public List<Customer> getCustomers() {
 		return customerService.getCustomers();
@@ -40,7 +35,7 @@ public class CustomerRestController {
 		return theCustomer;
 	}
 
-	@PostMapping("user/customers")
+	@PostMapping("/service/customers")
 	public Customer addCustomer(@RequestBody Customer theCustomer) {
 		theCustomer.setId(0);
 		if (theCustomer.getFirstName() == null || theCustomer.getLastName() == null) {
@@ -50,13 +45,7 @@ public class CustomerRestController {
 		return theCustomer;
 	}
 
-	@PutMapping("/customers")
-	public Customer putCustomer(@RequestBody Customer theCustomer) {
-		customerService.saveCustomer(theCustomer);
-		return theCustomer;
-	}
-
-	@DeleteMapping("/customers/{customerId}")
+	@DeleteMapping("/service/customers/{customerId}")
 	public String deleteCustomer(@PathVariable int customerId) {
 		Customer tempCustomer = customerService.getCustomer(customerId);
 		if (tempCustomer == null) {

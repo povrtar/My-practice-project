@@ -13,6 +13,7 @@ import com.myperssonal.demo.entity.User;
 public class UserServiceImpl implements UserService{
 @Autowired
 UserDAO userDao;
+
 	@Override
 	@Transactional
 	public List<User> getUsers() {		

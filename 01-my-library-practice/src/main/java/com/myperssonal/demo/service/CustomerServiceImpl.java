@@ -12,13 +12,8 @@ import com.myperssonal.demo.entity.Customer;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-	
-	private CustomerDAO customerDAO;
-	
 	@Autowired
-	public CustomerServiceImpl(CustomerDAO theCustomerDao) {
-		customerDAO=theCustomerDao;
-	}
+	private CustomerDAO customerDAO;
 	
 	@Override
 	@Transactional

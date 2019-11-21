@@ -16,12 +16,8 @@ import com.myperssonal.demo.entity.Book;
 
 @Repository
 public class BookDaoImpl implements BookDAO {
-	private EntityManager theEntityManager;
-
 	@Autowired
-	public BookDaoImpl(EntityManager entityManager) {
-		theEntityManager = entityManager;
-	}
+	private EntityManager theEntityManager;
 
 	@Override
 	public void saveBook(Book theBook) {

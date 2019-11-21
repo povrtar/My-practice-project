@@ -15,13 +15,8 @@ import com.myperssonal.demo.entity.BorrowBook;
 
 @Repository
 public class BorrowBookDAOImpl implements BorrowBookDAO {
-
-	private EntityManager entityManager;
-
 	@Autowired
-	public BorrowBookDAOImpl(EntityManager theEntityManager) {
-		entityManager = theEntityManager;
-	}
+	private EntityManager entityManager;
 
 	@Override
 	public void saveBorrowBook(BorrowBook bb) {
