@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myperssonal.demo.entity.Book;
@@ -19,7 +18,7 @@ import com.myperssonal.demo.service.BookService;
 @RestController
 @RequestMapping("/api")
 public class BookRestController {
-    @Autowired
+	@Autowired
 	BookService bookService;
 
 	@GetMapping("/books/{bookId}")
@@ -42,16 +41,18 @@ public class BookRestController {
 		return theBooks;
 	}
 
-	/*
-	 * @PostMapping("/user/books") public Book saveBook(@RequestBody Book theBook) {
-	 * theBook.setId(0);
-	 * if(theBook.getTitle()==null||theBook.getAutorFirstName()==null||theBook.
-	 * getAutorLastName()==null||theBook.getUnitStrength()==0) { throw new
-	 * RuntimeException("The Book details are incpomplite!!") ; }
-	 * bookService.saveBook(theBook);
-	 * 
-	 * return theBook; }
-	 */
+	@PostMapping("/user/books")
+	public Book saveBook(@RequestBody Book theBook) {
+		theBook.setId(0);
+		if (theBook.getTitle() == null || theBook.getAutorFirstName() == null || theBook.getAutorLastName() == null
+				|| theBook.getUnitStrength() == 0) {
+			throw new RuntimeException("The Book details are incpomplite!!");
+		} else {
+			bookService.saveBook(theBook);
+		}
+		return theBook;
+	}
+
 	@PutMapping("/service/books")
 	public Book updateBook(@RequestBody Book theBook) {
 		bookService.saveBook(theBook);

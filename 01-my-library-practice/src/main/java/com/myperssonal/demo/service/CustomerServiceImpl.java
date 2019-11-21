@@ -9,12 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.myperssonal.demo.DAO.CustomerDAO;
 import com.myperssonal.demo.entity.Customer;
 
-
 @Service
 public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private CustomerDAO customerDAO;
-	
+
 	@Override
 	@Transactional
 	public List<Customer> getCustomers() {
@@ -29,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	@Transactional
-	public Customer getCustomer(int theId) {		
+	public Customer getCustomer(int theId) {
 		return customerDAO.getCustomer(theId);
 	}
 
@@ -39,8 +38,3 @@ public class CustomerServiceImpl implements CustomerService {
 		customerDAO.deleteCustomer(theId);
 	}
 }
-
-
-
-
-
