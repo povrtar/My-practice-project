@@ -1,13 +1,7 @@
 package com.bosic.springboot.demo.myfirstapp.model;
 
-import java.io.Serializable;
+public class Product {
 
-public class Product implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private int id;
 	private String type;
 	private String size;
@@ -20,7 +14,6 @@ public class Product implements Serializable {
 		super();
 		this.type = type;
 		this.size = size;
-
 	}
 
 	public Product(int id, String type, String size, double price) {

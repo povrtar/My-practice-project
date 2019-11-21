@@ -4,7 +4,6 @@ public class Customer {
 
 	private int id;
 	private String firstName;
-
 	private String lastName;
 	private String password;
 	private String role;
@@ -79,5 +78,4 @@ public class Customer {
 	public void setRole(String role) {
 		this.role = role;
 	}
-
 }

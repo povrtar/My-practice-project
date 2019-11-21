@@ -3,7 +3,6 @@ package com.bosic.springboot.demo.myfirstapp.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -12,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import com.bosic.springboot.demo.myfirstapp.model.Drink;
 import com.bosic.springboot.demo.myfirstapp.model.Pizza;
 import com.bosic.springboot.demo.myfirstapp.service.ProductService;
@@ -28,16 +28,7 @@ public class OrderController {
 		return "welcome";
 	}
 
-	private String getLoggedInUserName(ModelMap model) {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (principal instanceof UserDetails) {
-			return ((UserDetails) principal).getUsername();
-		}
-		return principal.toString();
-	}
-
 	@GetMapping("/orders")
-
 	public String mainOrderPage(ModelMap model) {
 		String name = getLoggedInUserName(model);
 		model.put("productList", service.getProductList());
@@ -74,7 +65,9 @@ public class OrderController {
 		return "redirect:/orders";
 	}
 
-	@GetMapping("/delete-prod")//this is mapped on GET method because I don`t know how to add method="DELETE" to delete button in HTML form 
+	// this is mapped on GET method because I don`t know how to add method="DELETE"
+	// to delete button in HTML form
+	@GetMapping("/delete-prod")
 	public String deleteProduct(@RequestParam int id) {
 		if (service.getProdById(id).equals(null))
 			throw new RuntimeException("Something went wrong!!!");
@@ -82,4 +75,11 @@ public class OrderController {
 		return "redirect:/orders";
 	}
 
+	private String getLoggedInUserName(ModelMap model) {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof UserDetails) {
+			return ((UserDetails) principal).getUsername();
+		}
+		return principal.toString();
+	}
 }

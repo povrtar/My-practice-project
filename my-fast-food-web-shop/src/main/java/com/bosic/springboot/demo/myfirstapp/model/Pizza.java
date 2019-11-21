@@ -1,19 +1,17 @@
 package com.bosic.springboot.demo.myfirstapp.model;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class Pizza extends Product {
 
-    Logger logger=LoggerFactory.getLogger(getClass());
+	Logger logger = LoggerFactory.getLogger(getClass());
+
 	public Pizza() {
 	}
 
 	public Pizza(int id, String type, String size) {
 		super(id, type, size);
-		// TODO Auto-generated constructor stub
 	}
 
 	public Pizza(int id, String type, String size, String type2, String size2, double price) {
@@ -27,27 +25,32 @@ public class Pizza extends Product {
 	private String size;
 	private double price;
 
-	
+	@Override
 	public double getPrice() {
 		return price;
 	}
 
+	@Override
 	public void setPrice(double price) {
 		this.price = price;
 	}
 
+	@Override
 	public String getType() {
 		return type;
 	}
 
+	@Override
 	public void setType(String type) {
 		this.type = type;
 	}
 
+	@Override
 	public String getSize() {
 		return size;
 	}
 
+	@Override
 	public void setSize(String size) {
 		this.size = size;
 	}

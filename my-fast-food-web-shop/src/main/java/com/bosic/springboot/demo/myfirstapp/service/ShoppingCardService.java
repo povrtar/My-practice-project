@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.bosic.springboot.demo.myfirstapp.model.Customer;
 import com.bosic.springboot.demo.myfirstapp.model.Pizza;
 import com.bosic.springboot.demo.myfirstapp.model.Product;
@@ -23,7 +24,7 @@ public class ShoppingCardService {
 	private Customer customer = new Customer();
 	private static int counter = 0;
 	private static List<ShoppingCard> listOfCards = new ArrayList<>();
-	List<Product> list=new ArrayList<>();
+	List<Product> list = new ArrayList<>();
 	Logger logger = LoggerFactory.getLogger(getClass());
 
 	public void addCard(List<Product> inputList, String name) {
@@ -47,7 +48,6 @@ public class ShoppingCardService {
 		Stream<ShoppingCard> allCards = listOfCards.stream();
 		List<ShoppingCard> dailyCards = allCards.filter(card -> card.getDate().equals(date))
 				.collect(Collectors.toList());
-
 		return dailyCards;
 	}
 
@@ -60,10 +60,9 @@ public class ShoppingCardService {
 		return total;
 	}
 
-	public long howManyPizzasForDate(String date) {// date is in "yyyy-MM-dd" format
+	public long howManyPizzasForDate(String date) { // date is in "yyyy-MM-dd" format
 		List<ShoppingCard> cards = getCardsForDate(date);
 		long all = 0;
-
 		for (ShoppingCard card : cards) {
 			List<Product> dailyProducts = card.getProductList();
 			long count = 0;

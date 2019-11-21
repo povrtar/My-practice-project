@@ -10,6 +10,7 @@ import com.bosic.springboot.demo.myfirstapp.model.Customer;
 
 @Component
 public class CustomerService {
+
 	private static int counter = 1;
 	private static List<Customer> customerList = new ArrayList<>();
 
@@ -20,7 +21,6 @@ public class CustomerService {
 	}
 
 	public void addCustomer(Customer customer) {
-
 		customerList.add(new Customer(counter++, customer.getFirstName(), customer.getLastName(),
 				customer.getPassword(), "USER", customer.getDiscountLev()));
 	}
