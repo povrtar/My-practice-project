@@ -20,20 +20,24 @@ public class ProductService {
     Environment env;
     static int counter = 0;
     private double total = 0;
-    private List<Product> productList = new ArrayList<>();
+    private Product product = new Product();
+    private static List<Product> productList = new ArrayList<>();
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     public List<Product> getProductList() {
         return productList;
     }
 
-    public void addProduct(Product product) {
+    public void addProduct(Product requestProduct) {
+        product = requestProduct;
         if (product instanceof Pizza)
             product.setPrice(getPrice("pizza" + (product.getSize())));
         if (product instanceof Drink)
             product.setPrice(getPrice(product.getType()));
         product.setId(counter++);
         productList.add(product);
+        logger.info("Product : " + product);
+        logger.info("Product list =" + productList);
         total = total + product.getPrice();
     }
 

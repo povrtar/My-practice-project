@@ -46,6 +46,6 @@
 			</tbody>
 			
 		</table>
-	<a class="btn btn-success" href="/logout">Submit</a>
+	<a class="btn btn-success" href="/submit">Submit</a>
 	</div>
 <%@ include file="common/footer.jspf" %>

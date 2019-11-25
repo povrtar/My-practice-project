@@ -50,7 +50,7 @@ public class OrderController {
     @PostMapping("/add-order/pizzas")
     public String inputPizza(ModelMap model, @Valid Pizza pizza, BindingResult result) {
         if (result.hasErrors())
-            return "pizza";
+            return ("redirect:/pizza");
         if (service.productIsAvailable((pizza.getType()))) {
             service.addProduct(pizza);
         } else {
@@ -69,7 +69,7 @@ public class OrderController {
     @PostMapping("/add-order/drinks")
     public String inputDrink(ModelMap model, @Valid Drink drink, BindingResult result) {
         if (result.hasErrors()) {
-            return ("drink");
+            return ("redirect:/drink");
         }
         if (service.productIsAvailable(drink.getType())) {
             service.addProduct(drink);

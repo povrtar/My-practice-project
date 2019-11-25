@@ -1,5 +1,8 @@
 package com.bosic.springboot.demo.myfirstapp.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.bosic.springboot.demo.myfirstapp.model.Product;
 import com.bosic.springboot.demo.myfirstapp.service.ProductService;
 import com.bosic.springboot.demo.myfirstapp.service.ShoppingCardService;
 
@@ -24,20 +28,33 @@ public class LogoutController {
     private ProductService service;
     @Autowired
     private ShoppingCardService shoppingCardService;
-
+    private List<Product> productList = new ArrayList<Product>();
     private Logger logger = LogManager.getLogger(LogoutController.class);
 
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logout(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+    @RequestMapping(value = "/submit", method = RequestMethod.GET)
+    public String submit(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
         String name = getLoggedInUserName(model);
-
-        logger.info("User is " + name);
-        shoppingCardService.addCard(service.getProductList(), name);
+        if (name != null) {
+            productList.addAll(service.getProductList());
+            logger.info("product list= " + productList);
+            shoppingCardService.addCard(productList, name);
+        }
+        productList.clear();
         logger.info("Total = " + shoppingCardService.getTotal(service.getProductList()));
         service.cleanProductList();
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "redirect:/";
+    }
 
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+        service.cleanProductList();
+        Authentication authentication = SecurityContextHolder.getContext()
+                                                             .getAuthentication();
         if (authentication != null) {
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }

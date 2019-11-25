@@ -22,16 +22,16 @@ public class ShoppingCardService {
     @Autowired
     private CustomerService customerService;
     private Customer customer = new Customer();
-    private static int counter = 0;
+    private static int counter = 1;
     private static List<ShoppingCard> listOfCards = new ArrayList<>();
-    List<Product> list = new ArrayList<>();
     Logger logger = LoggerFactory.getLogger(getClass());
 
     public void addCard(List<Product> inputList, String name) {
-        list.clear();
-        this.list.addAll(inputList);
+        List<Product> list = new ArrayList<>();
+        list.addAll(inputList);
         customer = customerService.getCustomerByName(name);
-        listOfCards.add(new ShoppingCard(counter++, list, customer, getCurrentTimeStamp(), getTotal(list)));
+        ShoppingCard card = new ShoppingCard(counter++, list, customer, getCurrentTimeStamp(), getTotal(list));
+        listOfCards.add(card);
     }
 
     public double getTotal(List<Product> list) {
@@ -63,6 +63,7 @@ public class ShoppingCardService {
 
     public long howManyPizzasForDate(String date) { // date is in "yyyy-MM-dd" format
         List<ShoppingCard> cards = getCardsForDate(date);
+        logger.info("cards= " + cards.toString());
         long all = 0;
         for (ShoppingCard card : cards) {
             List<Product> dailyProducts = card.getProductList();
