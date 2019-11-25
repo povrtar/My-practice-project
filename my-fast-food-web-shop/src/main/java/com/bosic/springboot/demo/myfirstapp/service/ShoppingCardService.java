@@ -19,84 +19,87 @@ import com.bosic.springboot.demo.myfirstapp.model.ShoppingCard;
 
 @Service
 public class ShoppingCardService {
-	@Autowired
-	private CustomerService customerService;
-	private Customer customer = new Customer();
-	private static int counter = 0;
-	private static List<ShoppingCard> listOfCards = new ArrayList<>();
-	List<Product> list = new ArrayList<>();
-	Logger logger = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private CustomerService customerService;
+    private Customer customer = new Customer();
+    private static int counter = 0;
+    private static List<ShoppingCard> listOfCards = new ArrayList<>();
+    List<Product> list = new ArrayList<>();
+    Logger logger = LoggerFactory.getLogger(getClass());
 
-	public void addCard(List<Product> inputList, String name) {
-		list.clear();
-		this.list.addAll(inputList);
-		customer = customerService.getCustomerByName(name);
-		listOfCards.add(new ShoppingCard(counter++, list, customer, getCurrentTimeStamp(), getTotal(list)));
-	}
+    public void addCard(List<Product> inputList, String name) {
+        list.clear();
+        this.list.addAll(inputList);
+        customer = customerService.getCustomerByName(name);
+        listOfCards.add(new ShoppingCard(counter++, list, customer, getCurrentTimeStamp(), getTotal(list)));
+    }
 
-	public double getTotal(List<Product> list) {
-		double total = 0;
-		for (Product prod : list) {
-			total = total + prod.getPrice();
-			double discount = customer.getDiscountLev() * total / 100;
-			total = total - discount;
-		}
-		return total;
-	}
+    public double getTotal(List<Product> list) {
+        double total = 0;
+        for (Product prod : list) {
+            total = total + prod.getPrice();
+            double discount = customer.getDiscountLev() * total / 100;
+            total = total - discount;
+        }
+        return total;
+    }
 
-	public List<ShoppingCard> getCardsForDate(String date) {// date is in "yyyy-MM-dd" format
-		Stream<ShoppingCard> allCards = listOfCards.stream();
-		List<ShoppingCard> dailyCards = allCards.filter(card -> card.getDate().equals(date))
-				.collect(Collectors.toList());
-		return dailyCards;
-	}
+    public List<ShoppingCard> getCardsForDate(String date) {// date is in "yyyy-MM-dd" format
+        Stream<ShoppingCard> allCards = listOfCards.stream();
+        List<ShoppingCard> dailyCards = allCards.filter(card -> card.getDate()
+                                                                    .equals(date))
+                                                .collect(Collectors.toList());
+        return dailyCards;
+    }
 
-	public double getDailyTotal(String date) {
-		List<ShoppingCard> cards = getCardsForDate(date);
-		double total = 0;
-		for (ShoppingCard card : cards) {
-			total = total + card.getTotal();
-		}
-		return total;
-	}
+    public double getDailyTotal(String date) {
+        List<ShoppingCard> cards = getCardsForDate(date);
+        double total = 0;
+        for (ShoppingCard card : cards) {
+            total = total + card.getTotal();
+        }
+        return total;
+    }
 
-	public long howManyPizzasForDate(String date) { // date is in "yyyy-MM-dd" format
-		List<ShoppingCard> cards = getCardsForDate(date);
-		long all = 0;
-		for (ShoppingCard card : cards) {
-			List<Product> dailyProducts = card.getProductList();
-			long count = 0;
-			count = dailyProducts.stream().filter(prod -> prod instanceof Pizza).collect(Collectors.counting());
-			all = all + count;
-		}
-		return all;
-	}
+    public long howManyPizzasForDate(String date) { // date is in "yyyy-MM-dd" format
+        List<ShoppingCard> cards = getCardsForDate(date);
+        long all = 0;
+        for (ShoppingCard card : cards) {
+            List<Product> dailyProducts = card.getProductList();
+            long count = 0;
+            count = dailyProducts.stream()
+                                 .filter(prod -> prod instanceof Pizza)
+                                 .collect(Collectors.counting());
+            all = all + count;
+        }
+        return all;
+    }
 
-	public int getCounter() {
-		return counter;
-	}
+    public int getCounter() {
+        return counter;
+    }
 
-	public static void setCounter(int counter) {
-		ShoppingCardService.counter = counter;
-	}
+    public static void setCounter(int counter) {
+        ShoppingCardService.counter = counter;
+    }
 
-	public CustomerService getCustomerService() {
-		return customerService;
-	}
+    public CustomerService getCustomerService() {
+        return customerService;
+    }
 
-	public Customer getCustomer() {
-		return customer;
-	}
+    public Customer getCustomer() {
+        return customer;
+    }
 
-	public static List<ShoppingCard> getListOfCards() {
-		return listOfCards;
-	}
+    public static List<ShoppingCard> getListOfCards() {
+        return listOfCards;
+    }
 
-	public static String getCurrentTimeStamp() {
-		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-		Date now = new Date();
-		String strDate = sdfDate.format(now);
-		return strDate;
-	}
+    public static String getCurrentTimeStamp() {
+        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+        Date now = new Date();
+        String strDate = sdfDate.format(now);
+        return strDate;
+    }
 
 }

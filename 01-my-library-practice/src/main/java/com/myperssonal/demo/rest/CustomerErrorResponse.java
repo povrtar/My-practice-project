@@ -1,43 +1,43 @@
 package com.myperssonal.demo.rest;
 
 public class CustomerErrorResponse {
-	private int status;
-	private String mesage;
-	private long timeStamp;
+    private int status;
+    private String mesage;
+    private long timeStamp;
 
-	public CustomerErrorResponse() {
+    public CustomerErrorResponse() {
 
-	}
+    }
 
-	public CustomerErrorResponse(int status, String mesage, long timeStamp) {
-		super();
-		this.status = status;
-		this.mesage = mesage;
-		this.timeStamp = timeStamp;
-	}
+    public CustomerErrorResponse(int status, String mesage, long timeStamp) {
+        super();
+        this.status = status;
+        this.mesage = mesage;
+        this.timeStamp = timeStamp;
+    }
 
-	public int getStatus() {
-		return status;
-	}
+    public int getStatus() {
+        return status;
+    }
 
-	public void setStatus(int status) {
-		this.status = status;
-	}
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
-	public String getMesage() {
-		return mesage;
-	}
+    public String getMesage() {
+        return mesage;
+    }
 
-	public void setMesage(String mesage) {
-		this.mesage = mesage;
-	}
+    public void setMesage(String mesage) {
+        this.mesage = mesage;
+    }
 
-	public long getTimeStamp() {
-		return timeStamp;
-	}
+    public long getTimeStamp() {
+        return timeStamp;
+    }
 
-	public void setTimeStamp(long timeStamp) {
-		this.timeStamp = timeStamp;
-	}
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 
 }

@@ -11,37 +11,37 @@ import com.myperssonal.demo.entity.Book;
 
 @Service
 public class BookServiceImpl implements BookService {
-	@Autowired
-	private BookDAO bookDao;
+    @Autowired
+    private BookDAO bookDao;
 
-	@Override
-	@Transactional
-	public void saveBook(Book theBook) {
-		bookDao.saveBook(theBook);
-	}
+    @Override
+    @Transactional
+    public void saveBook(Book theBook) {
+        bookDao.saveBook(theBook);
+    }
 
-	@Override
-	@Transactional
-	public Book getBook(int theId) {
-		// TODO Auto-generated method stub
-		return bookDao.getBook(theId);
-	}
+    @Override
+    @Transactional
+    public Book getBook(int theId) {
+        // TODO Auto-generated method stub
+        return bookDao.getBook(theId);
+    }
 
-	@Override
-	@Transactional
-	public void deleteBook(int theId) {
-		// TODO Auto-generated method stub
-		bookDao.deleteBook(theId);
-	}
+    @Override
+    @Transactional
+    public void deleteBook(int theId) {
+        // TODO Auto-generated method stub
+        bookDao.deleteBook(theId);
+    }
 
-	@Override
-	public List<Book> getBooksByTitle(String title) {
-		return bookDao.getBookByTitle(title);
-	}
+    @Override
+    public List<Book> getBooksByTitle(String title) {
+        return bookDao.getBookByTitle(title);
+    }
 
-	@Override
-	public List<Book> getBooksByAutor(String lastName) {
-		return bookDao.getBooksByAutor(lastName);
-	}
+    @Override
+    public List<Book> getBooksByAutor(String lastName) {
+        return bookDao.getBooksByAutor(lastName);
+    }
 
 }

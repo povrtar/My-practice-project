@@ -4,6 +4,7 @@ import com.myperssonal.demo.entity.BorrowBook;
 
 public interface BorrowService {
 
-public void borrowBook(BorrowBook theBorrowBook);
-public void reverseBook(BorrowBook theBorrowBook);
+    public void borrowBook(BorrowBook theBorrowBook);
+
+    public void reverseBook(BorrowBook theBorrowBook);
 }

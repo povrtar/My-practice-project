@@ -8,30 +8,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.myperssonal.demo.entity.BorrowBook;
 import com.myperssonal.demo.service.BorrowService;
 
 @RestController
 @RequestMapping("/api")
 public class BorrowController {
-	@Autowired
-	BorrowService borrowService;
+    @Autowired
+    BorrowService borrowService;
 
-	@PostMapping("/borrow")
-	public void borrowBook(@RequestBody BorrowBook theBorrow) {
-		if (theBorrow.getBookId() == 0 || theBorrow.getCustomerId() == 0) {
-			throw new RuntimeException("Inputed parameters can't be 0 !!!");
-		}
-		long date = ZonedDateTime.now().toInstant().toEpochMilli();
-		theBorrow.setDate(date / 1000 / 60 / 60 / 24);
-		borrowService.borrowBook(theBorrow);
-	}
+    @PostMapping("/borrow")
+    public void borrowBook(@RequestBody BorrowBook theBorrow) {
+        if (theBorrow.getBookId() == 0 || theBorrow.getCustomerId() == 0) {
+            throw new RuntimeException("Inputed parameters can't be 0 !!!");
+        }
+        long date = ZonedDateTime.now()
+                                 .toInstant()
+                                 .toEpochMilli();
+        theBorrow.setDate(date / 1000 / 60 / 60 / 24);
+        borrowService.borrowBook(theBorrow);
+    }
 
-	@DeleteMapping("/borrow")
-	public void reverseBook(@RequestBody BorrowBook bb) {
+    @DeleteMapping("/borrow")
+    public void reverseBook(@RequestBody BorrowBook bb) {
 
-		borrowService.reverseBook(bb);
+        borrowService.reverseBook(bb);
 
-	}
-	
+    }
+
 }

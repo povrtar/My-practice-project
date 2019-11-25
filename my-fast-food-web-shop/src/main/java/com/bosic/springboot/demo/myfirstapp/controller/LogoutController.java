@@ -20,34 +20,37 @@ import com.bosic.springboot.demo.myfirstapp.service.ShoppingCardService;
 
 @Controller
 public class LogoutController {
-	@Autowired
-	private ProductService service;
-	@Autowired
-	private ShoppingCardService shoppingCardService;
+    @Autowired
+    private ProductService service;
+    @Autowired
+    private ShoppingCardService shoppingCardService;
 
-	private Logger logger = LogManager.getLogger(LogoutController.class);
+    private Logger logger = LogManager.getLogger(LogoutController.class);
 
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		String name = getLoggedInUserName(model);
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+        String name = getLoggedInUserName(model);
 
-		logger.info("User is " + name);
-		shoppingCardService.addCard(service.getProductList(), name);
-		logger.info("Total = " + shoppingCardService.getTotal(service.getProductList()));
-		service.cleanProductList();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        logger.info("User is " + name);
+        shoppingCardService.addCard(service.getProductList(), name);
+        logger.info("Total = " + shoppingCardService.getTotal(service.getProductList()));
+        service.cleanProductList();
+        Authentication authentication = SecurityContextHolder.getContext()
+                                                             .getAuthentication();
 
-		if (authentication != null) {
-			new SecurityContextLogoutHandler().logout(request, response, authentication);
-		}
-		return "redirect:/";
-	}
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "redirect:/";
+    }
 
-	private String getLoggedInUserName(ModelMap model) {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (principal instanceof UserDetails) {
-			return ((UserDetails) principal).getUsername();
-		}
-		return principal.toString();
-	}
+    private String getLoggedInUserName(ModelMap model) {
+        Object principal = SecurityContextHolder.getContext()
+                                                .getAuthentication()
+                                                .getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((UserDetails) principal).getUsername();
+        }
+        return principal.toString();
+    }
 }

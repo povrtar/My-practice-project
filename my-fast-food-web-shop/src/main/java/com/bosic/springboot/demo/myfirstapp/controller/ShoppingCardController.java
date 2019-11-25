@@ -10,15 +10,15 @@ import com.bosic.springboot.demo.myfirstapp.service.ShoppingCardService;
 @Controller
 public class ShoppingCardController {
 
-	@Autowired
-	private ShoppingCardService shoppingCardService;
+    @Autowired
+    private ShoppingCardService shoppingCardService;
 
-	String date = ShoppingCardService.getCurrentTimeStamp();
+    String date = ShoppingCardService.getCurrentTimeStamp();
 
-	@GetMapping("/managerPage")
-	public String getManagerData(Model model) {
-		model.addAttribute("dailyTotal", shoppingCardService.getDailyTotal(date));
-		model.addAttribute("dailyPizzas", shoppingCardService.howManyPizzasForDate(date));
-		return "manager-page";
-	}
+    @GetMapping("/managerPage")
+    public String getManagerData(Model model) {
+        model.addAttribute("dailyTotal", shoppingCardService.getDailyTotal(date));
+        model.addAttribute("dailyPizzas", shoppingCardService.howManyPizzasForDate(date));
+        return "manager-page";
+    }
 }

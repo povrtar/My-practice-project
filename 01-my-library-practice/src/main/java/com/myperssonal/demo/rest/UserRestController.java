@@ -19,61 +19,57 @@ import com.myperssonal.demo.service.UserService;
 @RequestMapping("/api")
 public class UserRestController {
 
-	UserService userService;
+    @Autowired
+    UserService userService;
 
-	@Autowired
-	public UserRestController(UserService theUserService) {
-		userService = theUserService;
-	}
+    @GetMapping("/users")
+    public List<User> getUsers() {
+        return userService.getUsers();
+    }
 
-	@GetMapping("/users")
-	public List<User> getUsers() {
-		return userService.getUsers();
-	}
+    @GetMapping("/users/{userId}")
+    public User getUser(@PathVariable int userId) {
+        User theUser = userService.getUserById(userId);
+        if (theUser == null) {
+            throw new CustomerNotFoundException("User not founded for id: " + userId);
+        }
+        return theUser;
+    }
 
-	@GetMapping("/users/{userId}")
-	public User getUser(@PathVariable int userId) {
-		User theUser = userService.getUserById(userId);
-		if (theUser == null) {
-			throw new CustomerNotFoundException("User not founded for id: " + userId);
-		}
-		return theUser;
-	}
+    @PostMapping("/users/")
+    public User addUser(@RequestBody User theUser) {
+        theUser.setId(0);
+        if (theUser.getName() == null || theUser.getPassword() == null || theUser.getRole() == null) {
+            throw new RuntimeException("User must have a name.password and role!!!");
+        }
+        userService.saveUser(theUser);
+        return theUser;
+    }
 
-	@PostMapping("/users/")
-	public User addUser(@RequestBody User theUser) {
-		theUser.setId(0);
-		if (theUser.getName() == null || theUser.getPassword()==null || theUser.getRole()==null) {
-			throw new RuntimeException("User must have a name.password and role!!!");
-		}
-		userService.saveUser(theUser);
-		return theUser;
-	}
+    @PutMapping("/users")
+    public User putUser(@RequestBody User theUser) {
 
-	@PutMapping("/users")
-	public User putUser(@RequestBody User theUser) {
+        userService.saveUser(theUser);
+        return theUser;
+    }
 
-		userService.saveUser(theUser);
-		return theUser;
-	}
+    @DeleteMapping("/users/{userId}")
+    public String deleteUser(@PathVariable int userId) {
+        User tempUser = userService.getUserById(userId);
 
-	@DeleteMapping("/users/{userId}")
-	public String deleteUser(@PathVariable int userId) {
-		User tempUser = userService.getUserById(userId);
+        if (tempUser == null) {
+            throw new CustomerNotFoundException("User not founded for id: " + userId);
+        }
+        userService.deleteUser(userId);
+        return "Deleted user id-" + userId;
+    }
 
-		if (tempUser == null) {
-			throw new CustomerNotFoundException("User not founded for id: " + userId);
-		}
-		userService.deleteUser(userId);
-		return "Deleted user id-" + userId;
-	}
-
-	@GetMapping("/usersbyname/{name}")
-	public List<User> getUserByName(@PathVariable String name) {
-		List<User> theUsers = userService.getUsersByName(name);
-		if (theUsers.size() == 0) {
-			throw new RuntimeException("User not founded for name: " + name);
-		}
-		return theUsers;
-	}
+    @GetMapping("/usersbyname/{name}")
+    public List<User> getUserByName(@PathVariable String name) {
+        List<User> theUsers = userService.getUsersByName(name);
+        if (theUsers.size() == 0) {
+            throw new RuntimeException("User not founded for name: " + name);
+        }
+        return theUsers;
+    }
 }

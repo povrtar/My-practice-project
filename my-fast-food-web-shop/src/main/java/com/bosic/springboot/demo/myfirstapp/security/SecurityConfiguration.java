@@ -13,26 +13,44 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	Environment env;
+    @Autowired
+    Environment env;
 
-	@Autowired
-	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser("Mihajlo").password(env.getProperty("miha.pass")).roles("USER", "ADMIN")
-				.and().withUser("Dunja").password(env.getProperty("dunja.pass")).roles("USER", "ADMIN").and()
-				.withUser("Zvezdan").password(env.getProperty("zvezdan.pass")).roles("USER", "ADMIN").and()
-				.withUser("Dragana").password(env.getProperty("dragana.pass")).roles("USER");
-	}
+    @Autowired
+    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+            .withUser("Mihajlo")
+            .password(env.getProperty("miha.pass"))
+            .roles("USER", "ADMIN")
+            .and()
+            .withUser("Dunja")
+            .password(env.getProperty("dunja.pass"))
+            .roles("USER", "ADMIN")
+            .and()
+            .withUser("Zvezdan")
+            .password(env.getProperty("zvezdan.pass"))
+            .roles("USER", "ADMIN")
+            .and()
+            .withUser("Dragana")
+            .password(env.getProperty("dragana.pass"))
+            .roles("USER");
+    }
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/login").permitAll().antMatchers("/").access("hasRole('USER')")
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+            .antMatchers("/login")
+            .permitAll()
+            .antMatchers("/")
+            .access("hasRole('USER')")
+            .antMatchers("/customers", "/managerPage")
+            .access("hasRole('ADMIN')")
+            .and()
+            .formLogin();
+    }
 
-				.antMatchers("/customers", "/managerPage").access("hasRole('ADMIN')").and().formLogin();
-	}
-
-	@Bean(name = "passwordEncoder")
-	public PasswordEncoder passwordncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

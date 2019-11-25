@@ -6,13 +6,13 @@ import com.myperssonal.demo.entity.Book;
 
 public interface BookDAO {
 
-	public void saveBook(Book theBook);
+    public void saveBook(Book theBook);
 
-	public Book getBook(int theId);
-	
-	public List<Book> getBookByTitle(String title) ;
-	
-	public List<Book> getBooksByAutor(String lastName);
+    public Book getBook(int theId);
 
-	public void deleteBook(int theId);
+    public List<Book> getBookByTitle(String title);
+
+    public List<Book> getBooksByAutor(String lastName);
+
+    public void deleteBook(int theId);
 }

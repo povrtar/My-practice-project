@@ -10,76 +10,76 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "book")
 public class Book {
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	
-	@Column(name = "first_name")
-	private String autorFirstName;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	@Column(name = "last_name")
-	private String autorLastName;
+    @Column(name = "first_name")
+    private String autorFirstName;
 
-	@Column(name = "title")
-	private String title;
-	
-	@Column(name = "field")
-	private String sector;
-	
-	@Column(name = "unit_strength")
-	private int unitStrength;
+    @Column(name = "last_name")
+    private String autorLastName;
 
-	public Book() {
+    @Column(name = "title")
+    private String title;
 
-	}
+    @Column(name = "field")
+    private String sector;
 
-	public int getId() {
-		return id;
-	}
+    @Column(name = "unit_strength")
+    private int unitStrength;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public Book() {
 
-	public String getAutorFirstName() {
-		return autorFirstName;
-	}
+    }
 
-	public void setAutorFirstName(String autorFirstName) {
-		this.autorFirstName = autorFirstName;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public String getAutorLastName() {
-		return autorLastName;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setAutorLastName(String autorLastName) {
-		this.autorLastName = autorLastName;
-	}
+    public String getAutorFirstName() {
+        return autorFirstName;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void setAutorFirstName(String autorFirstName) {
+        this.autorFirstName = autorFirstName;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public String getAutorLastName() {
+        return autorLastName;
+    }
 
-	public String getSector() {
-		return sector;
-	}
+    public void setAutorLastName(String autorLastName) {
+        this.autorLastName = autorLastName;
+    }
 
-	public void setSector(String sector) {
-		this.sector = sector;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public int getUnitStrength() {
-		return unitStrength;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setUnitStrength(int unitStrength) {
-		this.unitStrength = unitStrength;
-	}
+    public String getSector() {
+        return sector;
+    }
+
+    public void setSector(String sector) {
+        this.sector = sector;
+    }
+
+    public int getUnitStrength() {
+        return unitStrength;
+    }
+
+    public void setUnitStrength(int unitStrength) {
+        this.unitStrength = unitStrength;
+    }
 
 }
