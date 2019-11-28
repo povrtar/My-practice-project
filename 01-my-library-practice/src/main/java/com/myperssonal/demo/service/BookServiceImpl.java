@@ -44,4 +44,11 @@ public class BookServiceImpl implements BookService {
         return bookDao.getBooksByAutor(lastName);
     }
 
+    public boolean isComplete(Book theBook) {
+        if (theBook.getTitle() == null || theBook.getAutorFirstName() == null || theBook.getAutorLastName() == null
+                || theBook.getUnitStrength() == 0) {
+            return false;
+        } else
+            return true;
+    }
 }

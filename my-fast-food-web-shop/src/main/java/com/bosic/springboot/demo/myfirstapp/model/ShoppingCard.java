@@ -1,19 +1,17 @@
 package com.bosic.springboot.demo.myfirstapp.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ShoppingCard {
 
-    private int id;
     private List<Product> productList = new ArrayList<>();
     private Customer customer = new Customer();
-    private String date;
+    private Date date;
     private Double total;
 
-    public ShoppingCard(int id, List<Product> productList, Customer customer, String date, Double total) {
-        super();
-        this.id = id;
+    public ShoppingCard(List<Product> productList, Customer customer, Date date, Double total) {
         this.productList = productList;
         this.customer = customer;
         this.date = date;
@@ -44,15 +42,11 @@ public class ShoppingCard {
         this.total = total;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

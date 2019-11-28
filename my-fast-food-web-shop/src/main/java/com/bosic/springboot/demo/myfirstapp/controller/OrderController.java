@@ -37,6 +37,7 @@ public class OrderController {
         model.put("productList", service.getProductList());
         model.put("total", service.getTotal());
         model.put("name", name);
+        logger.info("mainOrderPage() " + this.hashCode());
         return "order-page";
     }
 

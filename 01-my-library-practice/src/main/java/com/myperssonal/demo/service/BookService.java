@@ -15,4 +15,6 @@ public interface BookService {
     public List<Book> getBooksByTitle(String title);
 
     public List<Book> getBooksByAutor(String lastName);
+
+    public boolean isComplete(Book theBook);
 }

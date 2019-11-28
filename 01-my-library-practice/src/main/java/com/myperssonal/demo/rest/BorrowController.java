@@ -23,11 +23,14 @@ public class BorrowController {
         if (theBorrow.getBookId() == 0 || theBorrow.getCustomerId() == 0) {
             throw new RuntimeException("Inputed parameters can't be 0 !!!");
         }
-        long date = ZonedDateTime.now()
-                                 .toInstant()
-                                 .toEpochMilli();
-        theBorrow.setDate(date / 1000 / 60 / 60 / 24);
-        borrowService.borrowBook(theBorrow);
+        if (borrowService.isPosibleToBorrow(theBorrow)) {
+            long date = ZonedDateTime.now()
+                                     .toInstant()
+                                     .toEpochMilli();
+            theBorrow.setDate(date / 1000 / 60 / 60 / 24);
+            borrowService.borrowBook(theBorrow);
+        } else
+            throw new RuntimeException("Some incorect parameters");
     }
 
     @DeleteMapping("/borrow")

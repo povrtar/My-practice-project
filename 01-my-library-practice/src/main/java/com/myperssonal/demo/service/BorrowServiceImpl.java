@@ -13,13 +13,13 @@ import com.myperssonal.demo.entity.Customer;
 
 @Service
 public class BorrowServiceImpl implements BorrowService {
-    private List<BorrowBook> bbList;
+    private List<BorrowBook> borrowBookDAOList;
     @Autowired
     private BookService bookService;
     @Autowired
     private CustomerService customerService;
     @Autowired
-    private BorrowBookDAO bb;
+    private BorrowBookDAO borrowBookDAO;
 
     @Override
     @Transactional
@@ -35,7 +35,7 @@ public class BorrowServiceImpl implements BorrowService {
             theCustomer.setForReverse(theCustomer.getForReverse() + 1);
             bookService.saveBook(theBook);
             customerService.saveCustomer(theCustomer);
-            bb.saveBorrowBook(theBorrowBook);
+            borrowBookDAO.saveBorrowBook(theBorrowBook);
         }
     }
 
@@ -45,8 +45,8 @@ public class BorrowServiceImpl implements BorrowService {
         boolean find = false;
         int theBookId = theBorrowBook.getBookId();
         int theCustomerId = theBorrowBook.getCustomerId();
-        bbList = bb.getBorrowedBooks(theBookId);
-        for (BorrowBook borBook : bbList) {
+        borrowBookDAOList = borrowBookDAO.getBorrowedBooks(theBookId);
+        for (BorrowBook borBook : borrowBookDAOList) {
             if (borBook.getBookId() == theBorrowBook.getBookId()
                     && borBook.getCustomerId() == theBorrowBook.getCustomerId()) {
                 find = true;
@@ -56,12 +56,21 @@ public class BorrowServiceImpl implements BorrowService {
                 theCustomer.setForReverse(theCustomer.getForReverse() - 1);
                 bookService.saveBook(theBook);
                 customerService.saveCustomer(theCustomer);
-                bb.deleteBorrowBook(theBorrowBook);
+                borrowBookDAO.deleteBorrowBook(theBorrowBook);
             }
 
         }
         if (!find) {
             throw new RuntimeException("Incorect reverse data");
         }
+    }
+
+    public boolean isPosibleToBorrow(BorrowBook borrowBook) {
+        Book theBook = bookService.getBook(borrowBook.getBookId());
+        Customer theCustomer = customerService.getCustomer(borrowBook.getCustomerId());
+        if (theBook != null && theCustomer != null && theBook.getUnitStrength() > 0 && theCustomer.getForReverse() < 3)
+            return true;
+        else
+            return false;
     }
 }

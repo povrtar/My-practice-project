@@ -1,15 +1,15 @@
 package com.myperssonal.demo.rest;
 
-public class CustomerErrorResponse {
+public class EntityErrorResponse {
     private int status;
     private String mesage;
     private long timeStamp;
 
-    public CustomerErrorResponse() {
+    public EntityErrorResponse() {
 
     }
 
-    public CustomerErrorResponse(int status, String mesage, long timeStamp) {
+    public EntityErrorResponse(int status, String mesage, long timeStamp) {
         super();
         this.status = status;
         this.mesage = mesage;

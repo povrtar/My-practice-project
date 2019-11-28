@@ -31,7 +31,7 @@ public class UserRestController {
     public User getUser(@PathVariable int userId) {
         User theUser = userService.getUserById(userId);
         if (theUser == null) {
-            throw new CustomerNotFoundException("User not founded for id: " + userId);
+            throw new EntityNotFoundException("User not founded for id: " + userId);
         }
         return theUser;
     }
@@ -58,7 +58,7 @@ public class UserRestController {
         User tempUser = userService.getUserById(userId);
 
         if (tempUser == null) {
-            throw new CustomerNotFoundException("User not founded for id: " + userId);
+            throw new EntityNotFoundException("User not founded for id: " + userId);
         }
         userService.deleteUser(userId);
         return "Deleted user id-" + userId;

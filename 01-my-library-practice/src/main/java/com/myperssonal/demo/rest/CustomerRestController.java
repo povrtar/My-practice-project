@@ -29,7 +29,7 @@ public class CustomerRestController {
     public Customer getCustomer(@PathVariable int customerId) {
         Customer theCustomer = customerService.getCustomer(customerId);
         if (theCustomer == null) {
-            throw new CustomerNotFoundException("Customer not founded for id: " + customerId);
+            throw new EntityNotFoundException("Customer not founded for id: " + customerId);
         }
         return theCustomer;
     }
@@ -48,7 +48,7 @@ public class CustomerRestController {
     public String deleteCustomer(@PathVariable int customerId) {
         Customer tempCustomer = customerService.getCustomer(customerId);
         if (tempCustomer == null) {
-            throw new CustomerNotFoundException("Customer not founded for id: " + customerId);
+            throw new EntityNotFoundException("Customer not founded for id: " + customerId);
         }
         customerService.deleteCustomer(customerId);
         return "Deleted customer id-" + customerId;

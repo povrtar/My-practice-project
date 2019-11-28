@@ -7,4 +7,6 @@ public interface BorrowService {
     public void borrowBook(BorrowBook theBorrowBook);
 
     public void reverseBook(BorrowBook theBorrowBook);
+
+    public boolean isPosibleToBorrow(BorrowBook theBorrow);
 }

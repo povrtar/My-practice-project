@@ -26,7 +26,7 @@ public class BookRestController {
         int id = Integer.valueOf(bookId);
         Book theBook = bookService.getBook(id);
         if (theBook == null) {
-            throw new CustomerNotFoundException("Book not founded for id: " + bookId);
+            throw new EntityNotFoundException("Book not founded for id: " + bookId);
         }
         return theBook;
     }
@@ -34,37 +34,40 @@ public class BookRestController {
     @GetMapping("/books/bytitle/{title}")
     public List<Book> getBooksByTitle(@PathVariable String title) {
         List<Book> theBooks = bookService.getBooksByTitle(title);
-        System.out.println("Nece da pridje");
         if (theBooks.size() == 0) {
-            throw new CustomerNotFoundException("Book with title " + title + "  not founded !!!");
+            throw new EntityNotFoundException("Book with title " + title + "  not founded !!!");
         }
         return theBooks;
     }
 
-    @PostMapping("/user/books")
+    @PostMapping("/service/books")
     public Book saveBook(@RequestBody Book theBook) {
         theBook.setId(0);
-        if (theBook.getTitle() == null || theBook.getAutorFirstName() == null || theBook.getAutorLastName() == null
-                || theBook.getUnitStrength() == 0) {
-            throw new RuntimeException("The Book details are incpomplite!!");
-        } else {
+        if (bookService.isComplete(theBook)) {
             bookService.saveBook(theBook);
+
+        } else {
+            throw new RuntimeException("The Book details are incomplete!!");
         }
         return theBook;
     }
 
     @PutMapping("/service/books")
     public Book updateBook(@RequestBody Book theBook) {
-        bookService.saveBook(theBook);
+        if (bookService.isComplete(theBook)) {
+            bookService.saveBook(theBook);
+        } else {
+            throw new RuntimeException("The Book details are incomplete!!");
+        }
         return theBook;
     }
 
-    @DeleteMapping("/books/{bookId}")
+    @DeleteMapping("/service/books/{bookId}")
     public Book deleteBook(@PathVariable String title) {
         int id = Integer.valueOf(title);
         Book theBook = bookService.getBook(id);
         if (theBook == null) {
-            throw new CustomerNotFoundException("Book not founded for id: " + id);
+            throw new EntityNotFoundException("Book not founded for id: " + id);
         } else {
             bookService.deleteBook(id);
         }
@@ -75,7 +78,7 @@ public class BookRestController {
     public List<Book> getBooksByAutor(@PathVariable String lastName) {
         List<Book> theBooks = bookService.getBooksByAutor(lastName);
         if (theBooks.size() == 0) {
-            throw new CustomerNotFoundException("Book writen by " + lastName + "  not founded !!!");
+            throw new EntityNotFoundException("Book writen by " + lastName + "  not founded !!!");
         }
         return theBooks;
     }

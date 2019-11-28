@@ -1,12 +1,12 @@
 package com.bosic.springboot.demo.myfirstapp.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import org.h2.mvstore.ConcurrentArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +23,15 @@ public class ShoppingCardService {
     private CustomerService customerService;
     private Customer customer = new Customer();
     private static int counter = 1;
-    private static List<ShoppingCard> listOfCards = new ArrayList<>();
+
+    private static ConcurrentArrayList<ShoppingCard> listOfCards = new ConcurrentArrayList<ShoppingCard>();
     Logger logger = LoggerFactory.getLogger(getClass());
 
     public void addCard(List<Product> inputList, String name) {
         List<Product> list = new ArrayList<>();
         list.addAll(inputList);
         customer = customerService.getCustomerByName(name);
-        ShoppingCard card = new ShoppingCard(counter++, list, customer, getCurrentTimeStamp(), getTotal(list));
+        ShoppingCard card = new ShoppingCard(list, customer, new Date(), getTotal(list));
         listOfCards.add(card);
     }
 
@@ -44,15 +45,21 @@ public class ShoppingCardService {
         return total;
     }
 
-    public List<ShoppingCard> getCardsForDate(String date) {// date is in "yyyy-MM-dd" format
-        Stream<ShoppingCard> allCards = listOfCards.stream();
-        List<ShoppingCard> dailyCards = allCards.filter(card -> card.getDate()
-                                                                    .equals(date))
-                                                .collect(Collectors.toList());
+    public List<ShoppingCard> getCardsForDate(Date date) {
+        List<ShoppingCard> dailyCards = new ArrayList<>();
+        Iterator<ShoppingCard> iterator = listOfCards.iterator();
+        while (iterator.hasNext()) {
+            ShoppingCard card = iterator.next();
+            if (card.getDate()
+                    .compareTo(date) == 0)
+                dailyCards.add(card);
+        }
+        if (dailyCards.isEmpty())
+            throw new RuntimeException("None  ShopingCards on the " + date + " date!");
         return dailyCards;
     }
 
-    public double getDailyTotal(String date) {
+    public double getDailyTotal(Date date) {
         List<ShoppingCard> cards = getCardsForDate(date);
         double total = 0;
         for (ShoppingCard card : cards) {
@@ -61,7 +68,7 @@ public class ShoppingCardService {
         return total;
     }
 
-    public long howManyPizzasForDate(String date) { // date is in "yyyy-MM-dd" format
+    public long howManyPizzasForDate(Date date) {
         List<ShoppingCard> cards = getCardsForDate(date);
         logger.info("cards= " + cards.toString());
         long all = 0;
@@ -92,15 +99,7 @@ public class ShoppingCardService {
         return customer;
     }
 
-    public static List<ShoppingCard> getListOfCards() {
+    public static ConcurrentArrayList<ShoppingCard> getListOfCards() {
         return listOfCards;
     }
-
-    public static String getCurrentTimeStamp() {
-        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-        Date now = new Date();
-        String strDate = sdfDate.format(now);
-        return strDate;
-    }
-
 }

@@ -6,7 +6,6 @@ public class Drink extends Product {
 
     public Drink(int id, String type, String size) {
         super(id, type, size);
-        // TODO Auto-generated constructor stub
     }
 
     public Drink(int id, String type, String size, double price) {
@@ -51,7 +50,7 @@ public class Drink extends Product {
 
     @Override
     public String toString() {
-        return "Pizza [type=" + type + ", size=" + size + "]";
+        return "Drink [type=" + type + ", size=" + size + ", price=" + price + "]";
     }
 
 }
