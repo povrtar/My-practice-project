@@ -1,6 +1,6 @@
 package com.bosic.springboot.demo.myfirstapp.controller;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,7 @@ public class ShoppingCardController {
     @Autowired
     private ShoppingCardService shoppingCardService;
 
-    Date date = new Date();
+    Calendar date = Calendar.getInstance();
 
     @GetMapping("/managerPage")
     public String getManagerData(Model model) {

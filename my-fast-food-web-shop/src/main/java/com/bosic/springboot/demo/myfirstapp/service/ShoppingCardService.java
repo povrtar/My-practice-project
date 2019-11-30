@@ -1,7 +1,8 @@
 package com.bosic.springboot.demo.myfirstapp.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,27 +32,28 @@ public class ShoppingCardService {
         List<Product> list = new ArrayList<>();
         list.addAll(inputList);
         customer = customerService.getCustomerByName(name);
-        ShoppingCard card = new ShoppingCard(list, customer, new Date(), getTotal(list));
+        ShoppingCard card = new ShoppingCard(list, customer, Calendar.getInstance(), getTotal(list));
         listOfCards.add(card);
     }
 
-    public double getTotal(List<Product> list) {
-        double total = 0;
+    public BigDecimal getTotal(List<Product> list) {
+        BigDecimal total = new BigDecimal("0.00");
         for (Product prod : list) {
-            total = total + prod.getPrice();
-            double discount = customer.getDiscountLev() * total / 100;
-            total = total - discount;
+            total = total.add(new BigDecimal(prod.getPrice()));
+            BigDecimal discount = new BigDecimal(customer.getDiscountLev()).multiply(
+                    total.divide(new BigDecimal("100")));
+            total = total.subtract(discount);
         }
         return total;
     }
 
-    public List<ShoppingCard> getCardsForDate(Date date) {
+    public List<ShoppingCard> getCardsForDate(Calendar date) {
         List<ShoppingCard> dailyCards = new ArrayList<>();
         Iterator<ShoppingCard> iterator = listOfCards.iterator();
         while (iterator.hasNext()) {
             ShoppingCard card = iterator.next();
-            if (card.getDate()
-                    .compareTo(date) == 0)
+            Calendar cal1 = card.getDate();
+            if (isSameDay(date, cal1))
                 dailyCards.add(card);
         }
         if (dailyCards.isEmpty())
@@ -59,16 +61,16 @@ public class ShoppingCardService {
         return dailyCards;
     }
 
-    public double getDailyTotal(Date date) {
+    public BigDecimal getDailyTotal(Calendar date) {
         List<ShoppingCard> cards = getCardsForDate(date);
-        double total = 0;
+        BigDecimal total = new BigDecimal("0.00");
         for (ShoppingCard card : cards) {
-            total = total + card.getTotal();
+            total = total.add(card.getTotal());
         }
         return total;
     }
 
-    public long howManyPizzasForDate(Date date) {
+    public long howManyPizzasForDate(Calendar date) {
         List<ShoppingCard> cards = getCardsForDate(date);
         logger.info("cards= " + cards.toString());
         long all = 0;
@@ -101,5 +103,12 @@ public class ShoppingCardService {
 
     public static ConcurrentArrayList<ShoppingCard> getListOfCards() {
         return listOfCards;
+    }
+
+    private boolean isSameDay(Calendar cal2, Calendar cal1) {
+
+        return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
+                && cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
+
     }
 }

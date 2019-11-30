@@ -1,20 +1,21 @@
 package com.bosic.springboot.demo.myfirstapp.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 public class ShoppingCard {
 
     private List<Product> productList = new ArrayList<>();
     private Customer customer = new Customer();
-    private Date date;
-    private Double total;
+    private Calendar date;
+    private BigDecimal total;
 
-    public ShoppingCard(List<Product> productList, Customer customer, Date date, Double total) {
+    public ShoppingCard(List<Product> productList, Customer customer, Calendar calendar, BigDecimal total) {
         this.productList = productList;
         this.customer = customer;
-        this.date = date;
+        this.date = calendar;
         this.total = total;
     }
 
@@ -34,19 +35,19 @@ public class ShoppingCard {
         this.customer = customer;
     }
 
-    public Double getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(Double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
     }
 
