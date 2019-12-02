@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ShoppingCard {
+public class ShoppingCart {
 
     private List<Product> productList = new ArrayList<>();
     private Customer customer = new Customer();
     private Calendar date;
     private BigDecimal total;
 
-    public ShoppingCard(List<Product> productList, Customer customer, Calendar calendar, BigDecimal total) {
+    public ShoppingCart(List<Product> productList, Customer customer, Calendar calendar, BigDecimal total) {
         this.productList = productList;
         this.customer = customer;
         this.date = calendar;
@@ -53,7 +53,7 @@ public class ShoppingCard {
 
     @Override
     public String toString() {
-        return "ShoppingCard [productList=" + productList + ", customer=" + customer + ", date=" + date + ", total="
+        return "ShoppingCart [productList=" + productList + ", customer=" + customer + ", date=" + date + ", total="
                 + total + "]";
     }
 

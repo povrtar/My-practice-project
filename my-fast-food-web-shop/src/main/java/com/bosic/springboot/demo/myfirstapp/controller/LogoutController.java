@@ -20,14 +20,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bosic.springboot.demo.myfirstapp.model.Product;
 import com.bosic.springboot.demo.myfirstapp.service.ProductService;
-import com.bosic.springboot.demo.myfirstapp.service.ShoppingCardService;
+import com.bosic.springboot.demo.myfirstapp.service.ShoppingCartService;
 
 @Controller
 public class LogoutController {
     @Autowired
     private ProductService service;
     @Autowired
-    private ShoppingCardService shoppingCardService;
+    private ShoppingCartService shoppingCartService;
     private List<Product> productList = new ArrayList<Product>();
     private Logger logger = LogManager.getLogger(LogoutController.class);
 
@@ -37,10 +37,10 @@ public class LogoutController {
         if (name != null) {
             productList.addAll(service.getProductList());
             logger.info("product list= " + productList);
-            shoppingCardService.addCard(productList, name);
+            shoppingCartService.addShoppingCart(productList, name);
         }
         productList.clear();
-        logger.info("Total = " + shoppingCardService.getTotal(service.getProductList()));
+        logger.info("Total = " + shoppingCartService.getTotal(service.getProductList()));
         service.cleanProductList();
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();

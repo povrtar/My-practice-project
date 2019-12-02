@@ -2,8 +2,6 @@ package com.bosic.springboot.demo.myfirstapp.controller;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +21,6 @@ public class OrderController {
 
     @Autowired
     private ProductService service;
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @GetMapping("/")
     public String logControl(ModelMap model) {
@@ -37,14 +34,12 @@ public class OrderController {
         model.put("productList", service.getProductList());
         model.put("total", service.getTotal());
         model.put("name", name);
-        logger.info("mainOrderPage() " + this.hashCode());
         return "order-page";
     }
 
     @GetMapping("/add-order/pizzas")
     public String addPizza(ModelMap model) {
         model.addAttribute("product", new Pizza());
-
         return "pizza";
     }
 
@@ -52,12 +47,7 @@ public class OrderController {
     public String inputPizza(ModelMap model, @Valid Pizza pizza, BindingResult result) {
         if (result.hasErrors())
             return ("redirect:/pizza");
-        if (service.productIsAvailable((pizza.getType()))) {
-            service.addProduct(pizza);
-        } else {
-            logger.info("Pizza : " + pizza.getType() + pizza.getSize());
-
-        }
+        service.addProduct(pizza);
         return "redirect:/orders";
     }
 
@@ -72,19 +62,12 @@ public class OrderController {
         if (result.hasErrors()) {
             return ("redirect:/drink");
         }
-        if (service.productIsAvailable(drink.getType())) {
-            service.addProduct(drink);
-        }
+        service.addProduct(drink);
         return "redirect:/orders";
     }
 
-    // this is mapped on GET method because I don`t know how to add method="DELETE"
-    // to delete button in HTML form
-    @GetMapping("/delete-prod")
+    @PostMapping("/delete-prod")
     public String deleteProduct(@RequestParam int id) {
-        if (service.getProdById(id)
-                   .equals(null))
-            throw new RuntimeException("Something went wrong!!!");
         service.deleteProduct(id);
         return "redirect:/orders";
     }

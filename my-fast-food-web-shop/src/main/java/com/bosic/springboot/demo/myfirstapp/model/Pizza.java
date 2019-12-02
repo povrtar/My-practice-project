@@ -1,11 +1,6 @@
 package com.bosic.springboot.demo.myfirstapp.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Pizza extends Product {
-
-    Logger logger = LoggerFactory.getLogger(getClass());
 
     public Pizza() {
     }

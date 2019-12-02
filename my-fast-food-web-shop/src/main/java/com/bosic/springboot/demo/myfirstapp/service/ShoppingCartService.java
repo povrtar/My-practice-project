@@ -8,32 +8,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.h2.mvstore.ConcurrentArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bosic.springboot.demo.myfirstapp.model.Customer;
 import com.bosic.springboot.demo.myfirstapp.model.Pizza;
 import com.bosic.springboot.demo.myfirstapp.model.Product;
-import com.bosic.springboot.demo.myfirstapp.model.ShoppingCard;
+import com.bosic.springboot.demo.myfirstapp.model.ShoppingCart;
 
 @Service
-public class ShoppingCardService {
+public class ShoppingCartService {
     @Autowired
     private CustomerService customerService;
     private Customer customer = new Customer();
     private static int counter = 1;
 
-    private static ConcurrentArrayList<ShoppingCard> listOfCards = new ConcurrentArrayList<ShoppingCard>();
-    Logger logger = LoggerFactory.getLogger(getClass());
+    private static ConcurrentArrayList<ShoppingCart> listOfShoppingCarts = new ConcurrentArrayList<ShoppingCart>();
 
-    public void addCard(List<Product> inputList, String name) {
+    public void addShoppingCart(List<Product> inputList, String name) {
         List<Product> list = new ArrayList<>();
         list.addAll(inputList);
         customer = customerService.getCustomerByName(name);
-        ShoppingCard card = new ShoppingCard(list, customer, Calendar.getInstance(), getTotal(list));
-        listOfCards.add(card);
+        ShoppingCart ShoppingCart = new ShoppingCart(list, customer, Calendar.getInstance(), getTotal(list));
+        listOfShoppingCarts.add(ShoppingCart);
     }
 
     public BigDecimal getTotal(List<Product> list) {
@@ -47,35 +44,35 @@ public class ShoppingCardService {
         return total;
     }
 
-    public List<ShoppingCard> getCardsForDate(Calendar date) {
-        List<ShoppingCard> dailyCards = new ArrayList<>();
-        Iterator<ShoppingCard> iterator = listOfCards.iterator();
+    public List<ShoppingCart> getShoppingCartsForDate(Calendar date) {
+        List<ShoppingCart> dailyShoppingCarts = new ArrayList<>();
+        Iterator<ShoppingCart> iterator = listOfShoppingCarts.iterator();
         while (iterator.hasNext()) {
-            ShoppingCard card = iterator.next();
-            Calendar cal1 = card.getDate();
+            ShoppingCart shoppingCart = iterator.next();
+            Calendar cal1 = shoppingCart.getDate();
             if (isSameDay(date, cal1))
-                dailyCards.add(card);
+                dailyShoppingCarts.add(shoppingCart);
         }
-        if (dailyCards.isEmpty())
-            throw new RuntimeException("None  ShopingCards on the " + date + " date!");
-        return dailyCards;
+        if (dailyShoppingCarts.isEmpty()) {
+            throw new RuntimeException("None  ShopingShoppingCarts on the " + date + " date!");
+        }
+        return dailyShoppingCarts;
     }
 
     public BigDecimal getDailyTotal(Calendar date) {
-        List<ShoppingCard> cards = getCardsForDate(date);
+        List<ShoppingCart> shoppingCarts = getShoppingCartsForDate(date);
         BigDecimal total = new BigDecimal("0.00");
-        for (ShoppingCard card : cards) {
-            total = total.add(card.getTotal());
+        for (ShoppingCart shoppingCart : shoppingCarts) {
+            total = total.add(shoppingCart.getTotal());
         }
         return total;
     }
 
     public long howManyPizzasForDate(Calendar date) {
-        List<ShoppingCard> cards = getCardsForDate(date);
-        logger.info("cards= " + cards.toString());
+        List<ShoppingCart> shoppingCarts = getShoppingCartsForDate(date);
         long all = 0;
-        for (ShoppingCard card : cards) {
-            List<Product> dailyProducts = card.getProductList();
+        for (ShoppingCart shoppingCart : shoppingCarts) {
+            List<Product> dailyProducts = shoppingCart.getProductList();
             long count = 0;
             count = dailyProducts.stream()
                                  .filter(prod -> prod instanceof Pizza)
@@ -90,7 +87,7 @@ public class ShoppingCardService {
     }
 
     public static void setCounter(int counter) {
-        ShoppingCardService.counter = counter;
+        ShoppingCartService.counter = counter;
     }
 
     public CustomerService getCustomerService() {
@@ -101,12 +98,11 @@ public class ShoppingCardService {
         return customer;
     }
 
-    public static ConcurrentArrayList<ShoppingCard> getListOfCards() {
-        return listOfCards;
+    public static ConcurrentArrayList<ShoppingCart> getListOfShoppingCarts() {
+        return listOfShoppingCarts;
     }
 
     private boolean isSameDay(Calendar cal2, Calendar cal1) {
-
         return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
                 && cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
 

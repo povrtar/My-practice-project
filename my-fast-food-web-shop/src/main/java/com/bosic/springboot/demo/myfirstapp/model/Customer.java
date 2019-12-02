@@ -2,7 +2,6 @@ package com.bosic.springboot.demo.myfirstapp.model;
 
 public class Customer {
 
-    private int id;
     private String firstName;
     private String lastName;
     private String password;
@@ -13,30 +12,11 @@ public class Customer {
     }
 
     public Customer(String firstName, String lastName, String password, String role, int discountLev) {
-        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.role = role;
         this.discountLev = discountLev;
-    }
-
-    public Customer(int id, String firstName, String lastName, String password, String role, int discountLev) {
-        super();
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        this.role = role;
-        this.discountLev = discountLev;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -55,14 +35,6 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    public int getDiscountLev() {
-        return discountLev;
-    }
-
-    public void setDiscountLev(int discountLev) {
-        this.discountLev = discountLev;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -78,4 +50,59 @@ public class Customer {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public int getDiscountLev() {
+        return discountLev;
+    }
+
+    public void setDiscountLev(int discountLev) {
+        this.discountLev = discountLev;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 13;
+        result = prime * result + discountLev;
+        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+        result = prime * result + ((password == null) ? 0 : password.hashCode());
+        result = prime * result + ((role == null) ? 0 : role.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Customer other = (Customer) obj;
+        if (discountLev != other.discountLev)
+            return false;
+        if (firstName == null) {
+            if (other.firstName != null)
+                return false;
+        } else if (!firstName.equals(other.firstName))
+            return false;
+        if (lastName == null) {
+            if (other.lastName != null)
+                return false;
+        } else if (!lastName.equals(other.lastName))
+            return false;
+        if (password == null) {
+            if (other.password != null)
+                return false;
+        } else if (!password.equals(other.password))
+            return false;
+        if (role == null) {
+            if (other.role != null)
+                return false;
+        } else if (!role.equals(other.role))
+            return false;
+        return true;
+    }
+
 }

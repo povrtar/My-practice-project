@@ -26,31 +26,16 @@ public class CustomerController {
 
     @PostMapping("/customers")
     public String addCustomer(ModelMap model, @Valid Customer customer, BindingResult result) {
-        if (customerIsWithoutNullField(customer)) {
-            customer.setId(0);
-            customerService.addCustomer(customer);
-            model.addAttribute("customerList", customerService.getCustomers());
-            return "customer-list";
-        } else
-            throw new RuntimeException("Incomplete Customer details");
+        customerService.addCustomer(customer);
+        model.addAttribute("customerList", customerService.getCustomers());
+        return "customer-list";
     }
 
     @PutMapping("/customers")
     public String updateCustomer(ModelMap model, @Valid Customer customer, BindingResult result) {
-        if (customerIsWithoutNullField(customer)) {
-            customerService.addCustomer(customer);
-            model.addAttribute("customerList", customerService.getCustomers());
-            return "customer-list";
-        } else
-            throw new RuntimeException("Incomplete Customer details");
+        customerService.addCustomer(customer);
+        model.addAttribute("customerList", customerService.getCustomers());
+        return "customer-list";
     }
 
-    private boolean customerIsWithoutNullField(Customer customer) {
-        if ((customer.getFirstName() == null || customer.getLastName() == null || customer.getPassword() == null)) {
-            return false;
-        } else {
-            return true;
-        }
-
-    }
 }
