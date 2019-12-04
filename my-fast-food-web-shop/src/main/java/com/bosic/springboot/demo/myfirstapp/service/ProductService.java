@@ -22,7 +22,6 @@ public class ProductService {
     Environment env;
     @Autowired
     CustomerService customerService;
-    private static int counter = 0;
     private static Map<Customer, List<Product>> mapCustomerWithList = new ConcurrentHashMap<>();
 
     public List<? extends Product> getProductList(String name) {
@@ -46,42 +45,43 @@ public class ProductService {
         } else {
             product = requestProduct;
             if (product instanceof Pizza) {
-                product.setPrice(getPrice("pizza" + (product.getSize())));
+                product.setPrice(getPrice("pizza" + (((Pizza) product).getSize())));
             }
             if (product instanceof Drink) {
                 product.setPrice(getPrice(product.getType()));
             }
-            product.setId(counter++);
+
             list.add(product);
             mapCustomerWithList.put(customer, list);
         }
     }
 
-    public void deleteProduct(int id, String name) throws Exception {
+    public void deleteProduct(String type, String name) throws Exception {
         List<Product> productList = new ArrayList<>();
         if (customerService.getCustomerByName(name) == null) {
             throw ObjectNotFoundException.createWith(Customer.class.getName()
                                                                    .toString());
         }
         productList.addAll(mapCustomerWithList.get(customerService.getCustomerByName(name)));
-        if (!(productList.contains(getProductById(id, productList)))) {
+        if (!(productList.contains(getProductByType(type, productList)))) {
             throw ObjectNotFoundException.createWith(Product.class.getName()
                                                                   .toString());
         }
         Iterator<Product> iterator = productList.iterator();
         while (iterator.hasNext()) {
             Product prod = iterator.next();
-            if (prod.getId() == id) {
+            if (type.equals(prod.getType())) {
                 iterator.remove();
             }
+            mapCustomerWithList.put(customerService.getCustomerByName(name), productList);
         }
     }
 
-    public Product getProductById(int id, List<Product> productList) {
+    public Product getProductByType(String type, List<Product> productList) {
         Iterator<Product> iterator = productList.iterator();
         while (iterator.hasNext()) {
             Product prod = iterator.next();
-            if (prod.getId() == id) {
+            if (type.equals(prod.getType())) {
                 return prod;
             }
         }

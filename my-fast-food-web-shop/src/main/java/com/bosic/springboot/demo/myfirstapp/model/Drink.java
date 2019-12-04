@@ -1,56 +1,18 @@
 package com.bosic.springboot.demo.myfirstapp.model;
 
 public class Drink extends Product {
+
     public Drink() {
+        super();
     }
 
-    public Drink(int id, String type, String size) {
-        super(id, type, size);
-    }
-
-    public Drink(int id, String type, String size, double price) {
-        super(id, type, size);
-
-        this.price = price;
-    }
-
-    private String type;
-    private String size;
-    private double price;
-
-    @Override
-    public double getPrice() {
-        return price;
-    }
-
-    @Override
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    @Override
-    public String getType() {
-        return type;
-    }
-
-    @Override
-    public void setType(String type) {
+    public Drink(String type, String size) {
         this.type = type;
     }
 
-    @Override
-    public String getSize() {
-        return size;
-    }
-
-    @Override
-    public void setSize(String size) {
+    public Drink(String type, String size, double price) {
+        this.type = type;
         this.size = size;
+        this.price = price;
     }
-
-    @Override
-    public String toString() {
-        return "Drink [type=" + type + ", size=" + size + ", price=" + price + "]";
-    }
-
 }

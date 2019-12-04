@@ -12,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.bosic.springboot.demo.myfirstapp.model.Drink;
 import com.bosic.springboot.demo.myfirstapp.model.Pizza;
@@ -21,7 +20,6 @@ import com.bosic.springboot.demo.myfirstapp.service.ProductService;
 import com.bosic.springboot.demo.myfirstapp.service.ShoppingCartService;
 
 @Controller
-@SessionAttributes("name")
 public class OrderController {
 
     @Autowired
@@ -60,7 +58,7 @@ public class OrderController {
     }
 
     @GetMapping("/add-order/drinks")
-    public String addDrink(ModelMap model) {
+    public String addDrink(ModelMap model, HttpSession session) {
         model.addAttribute("product", new Drink());
         return "drink";
     }
@@ -75,8 +73,8 @@ public class OrderController {
     }
 
     @GetMapping("/delete-prod")
-    public String deleteProduct(ModelMap model, @RequestParam int id) throws Exception {
-        service.deleteProduct(id, getLoggedInUserName(model));
+    public String deleteProduct(ModelMap model, @RequestParam String type, HttpSession session) throws Exception {
+        service.deleteProduct(type, getLoggedInUserName(model));
         return "redirect:/orders";
     }
 

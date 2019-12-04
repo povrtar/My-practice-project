@@ -1,34 +1,12 @@
 package com.bosic.springboot.demo.myfirstapp.model;
 
-public class Product {
+public abstract class Product {
 
-    private int id;
-    private String type;
-    private String size;
-    private double price;
+    protected String type;
+    protected String size;
+    protected double price;
 
     public Product() {
-    }
-
-    public Product(int id, String type, String size) {
-        super();
-        this.type = type;
-        this.size = size;
-    }
-
-    public Product(int id, String type, String size, double price) {
-        super();
-        this.type = type;
-        this.size = size;
-        this.price = price;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getType() {
@@ -39,14 +17,6 @@ public class Product {
         this.type = type;
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
     public double getPrice() {
         return price;
     }
@@ -55,9 +25,17 @@ public class Product {
         this.price = price;
     }
 
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
     @Override
     public String toString() {
-        return "Product [id=" + id + ", type=" + type + ", size=" + size + ", price=" + price + "]";
+        return "Product [type=" + type + ", price=" + price + "]";
     }
 
 }
