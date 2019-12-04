@@ -1,5 +1,6 @@
 package com.bosic.springboot.demo.myfirstapp.controller;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,29 +12,36 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.bosic.springboot.demo.myfirstapp.model.Drink;
 import com.bosic.springboot.demo.myfirstapp.model.Pizza;
+import com.bosic.springboot.demo.myfirstapp.service.CustomerService;
 import com.bosic.springboot.demo.myfirstapp.service.ProductService;
+import com.bosic.springboot.demo.myfirstapp.service.ShoppingCartService;
 
 @Controller
+@SessionAttributes("name")
 public class OrderController {
 
     @Autowired
     private ProductService service;
+    @Autowired
+    private CustomerService customerService;
 
     @GetMapping("/")
-    public String logControl(ModelMap model) {
+    public String logControl(ModelMap model, HttpSession session) {
         model.addAttribute("name", getLoggedInUserName(model));
+        session.setAttribute("name", getLoggedInUserName(model));
         return "welcome";
     }
 
     @GetMapping("/orders")
-    public String mainOrderPage(ModelMap model) {
-        String name = getLoggedInUserName(model);
-        model.put("productList", service.getProductList());
-        model.put("total", service.getTotal());
-        model.put("name", name);
+    public String mainOrderPage(ModelMap model, HttpSession session) throws Exception {
+        String name = (String) session.getAttribute("name");
+        model.put("productList", service.getProductList(name));
+        model.put("total",
+                ShoppingCartService.getTotal(service.getProductList(name), customerService.getCustomerByName(name)));
         return "order-page";
     }
 
@@ -44,10 +52,10 @@ public class OrderController {
     }
 
     @PostMapping("/add-order/pizzas")
-    public String inputPizza(ModelMap model, @Valid Pizza pizza, BindingResult result) {
+    public String inputPizza(ModelMap model, @Valid Pizza pizza, BindingResult result) throws Exception {
         if (result.hasErrors())
             return ("redirect:/pizza");
-        service.addProduct(pizza);
+        service.addProduct(pizza, getLoggedInUserName(model));
         return "redirect:/orders";
     }
 
@@ -58,17 +66,17 @@ public class OrderController {
     }
 
     @PostMapping("/add-order/drinks")
-    public String inputDrink(ModelMap model, @Valid Drink drink, BindingResult result) {
+    public String inputDrink(ModelMap model, @Valid Drink drink, BindingResult result) throws Exception {
         if (result.hasErrors()) {
             return ("redirect:/drink");
         }
-        service.addProduct(drink);
+        service.addProduct(drink, getLoggedInUserName(model));
         return "redirect:/orders";
     }
 
-    @PostMapping("/delete-prod")
-    public String deleteProduct(@RequestParam int id) {
-        service.deleteProduct(id);
+    @GetMapping("/delete-prod")
+    public String deleteProduct(ModelMap model, @RequestParam int id) throws Exception {
+        service.deleteProduct(id, getLoggedInUserName(model));
         return "redirect:/orders";
     }
 

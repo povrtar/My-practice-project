@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.bosic.springboot.demo.myfirstapp.controller.IncompleteDetailsException;
 import com.bosic.springboot.demo.myfirstapp.controller.ObjectNotFoundException;
 import com.bosic.springboot.demo.myfirstapp.model.Customer;
 
-@Component
+@Service
 public class CustomerService {
 
     private static List<Customer> customerList = new ArrayList<>();

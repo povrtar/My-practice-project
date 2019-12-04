@@ -1,9 +1,10 @@
 package com.bosic.springboot.demo.myfirstapp.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -19,34 +20,51 @@ import com.bosic.springboot.demo.myfirstapp.model.Product;
 public class ProductService {
     @Autowired
     Environment env;
-    static int counter = 0;
-    private double total = 0;
-    private Product product = new Product();
-    private static List<Product> productList = new ArrayList<>();
-    private HashMap<Customer, List<Product>> customerWithList = new HashMap<>();
+    @Autowired
+    CustomerService customerService;
+    private static int counter = 0;
+    private static Map<Customer, List<Product>> mapCustomerWithList = new ConcurrentHashMap<>();
 
-    public List<Product> getProductList() {
-        return productList;
+    public List<? extends Product> getProductList(String name) {
+        if (customerService.getCustomerByName(name) == null) {
+            throw ObjectNotFoundException.createWith(Customer.class.getName()
+                                                                   .toString());
+        }
+        return mapCustomerWithList.get(customerService.getCustomerByName(name));
     }
 
-    public void addProduct(Product requestProduct) throws ObjectNotFoundException {
+    public void addProduct(Product requestProduct, String name) throws Exception {
+        Customer customer = customerService.getCustomerByName(name);
+        List<Product> list = new ArrayList<>();
+        if (mapCustomerWithList.containsKey(customer)) {
+            list.addAll(mapCustomerWithList.get(customer));
+        }
+        Product product = requestProduct;
         if (!productIsAvailable(requestProduct.getType())) {
             throw ObjectNotFoundException.createWith(requestProduct.getClass()
                                                                    .toString());
         } else {
             product = requestProduct;
-            if (product instanceof Pizza)
+            if (product instanceof Pizza) {
                 product.setPrice(getPrice("pizza" + (product.getSize())));
-            if (product instanceof Drink)
+            }
+            if (product instanceof Drink) {
                 product.setPrice(getPrice(product.getType()));
+            }
             product.setId(counter++);
-            productList.add(product);
-            total = total + product.getPrice();
+            list.add(product);
+            mapCustomerWithList.put(customer, list);
         }
     }
 
-    public void deleteProduct(int id) throws ObjectNotFoundException {
-        if (!(productList.contains(getProductById(id)))) {
+    public void deleteProduct(int id, String name) throws Exception {
+        List<Product> productList = new ArrayList<>();
+        if (customerService.getCustomerByName(name) == null) {
+            throw ObjectNotFoundException.createWith(Customer.class.getName()
+                                                                   .toString());
+        }
+        productList.addAll(mapCustomerWithList.get(customerService.getCustomerByName(name)));
+        if (!(productList.contains(getProductById(id, productList)))) {
             throw ObjectNotFoundException.createWith(Product.class.getName()
                                                                   .toString());
         }
@@ -54,19 +72,12 @@ public class ProductService {
         while (iterator.hasNext()) {
             Product prod = iterator.next();
             if (prod.getId() == id) {
-                total = total - prod.getPrice();
                 iterator.remove();
             }
         }
     }
 
-    public void cleanProductList() {
-        productList.clear();
-        total = 0;
-        counter = 0;
-    }
-
-    public Product getProductById(int id) {
+    public Product getProductById(int id, List<Product> productList) {
         Iterator<Product> iterator = productList.iterator();
         while (iterator.hasNext()) {
             Product prod = iterator.next();
@@ -81,16 +92,15 @@ public class ProductService {
         return (Double.parseDouble(env.getProperty(productName)));
     }
 
-    public double getTotal() {
-        return total;
-    }
-
     public boolean productIsAvailable(String productName) {
         return (env.containsProperty(productName));
     }
 
-    @Override
-    public String toString() {
-        return "ProductService [productList=" + productList + "]";
+    public void cleanProductList(String name) {
+        if (mapCustomerWithList.containsKey(customerService.getCustomerByName(name))) {
+            mapCustomerWithList.get(customerService.getCustomerByName(name))
+                               .clear();
+
+        }
     }
 }

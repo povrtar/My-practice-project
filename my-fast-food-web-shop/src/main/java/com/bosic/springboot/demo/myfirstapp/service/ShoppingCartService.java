@@ -11,6 +11,7 @@ import org.h2.mvstore.ConcurrentArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bosic.springboot.demo.myfirstapp.controller.ObjectNotFoundException;
 import com.bosic.springboot.demo.myfirstapp.model.Customer;
 import com.bosic.springboot.demo.myfirstapp.model.Pizza;
 import com.bosic.springboot.demo.myfirstapp.model.Product;
@@ -22,26 +23,34 @@ public class ShoppingCartService {
     private CustomerService customerService;
     private Customer customer = new Customer();
     private static int counter = 1;
-
     private static ConcurrentArrayList<ShoppingCart> listOfShoppingCarts = new ConcurrentArrayList<ShoppingCart>();
 
-    public void addShoppingCart(List<Product> inputList, String name) {
+    public static final BigDecimal getTotal(List<? extends Product> theList, Customer customer) throws Exception {
+        BigDecimal total = new BigDecimal("0.00");
+        List<Product> list = new ArrayList<>();
+        if (theList != null) {
+            list.addAll(theList);
+        }
+        if (customer == null) {
+            throw ObjectNotFoundException.createWith(Customer.class.getName()
+                                                                   .toString());
+        } else if (!(list.isEmpty())) {
+            for (Product prod : list) {
+                total = total.add(new BigDecimal(prod.getPrice()));
+                BigDecimal discount = new BigDecimal(customer.getDiscountLev()).multiply(
+                        total.divide(new BigDecimal("100")));
+                total = total.subtract(discount);
+            }
+        }
+        return total;
+    }
+
+    public void addShoppingCart(List<? extends Product> inputList, String name) throws Exception {
         List<Product> list = new ArrayList<>();
         list.addAll(inputList);
         customer = customerService.getCustomerByName(name);
-        ShoppingCart ShoppingCart = new ShoppingCart(list, customer, Calendar.getInstance(), getTotal(list));
+        ShoppingCart ShoppingCart = new ShoppingCart(list, customer, Calendar.getInstance(), getTotal(list, customer));
         listOfShoppingCarts.add(ShoppingCart);
-    }
-
-    public BigDecimal getTotal(List<Product> list) {
-        BigDecimal total = new BigDecimal("0.00");
-        for (Product prod : list) {
-            total = total.add(new BigDecimal(prod.getPrice()));
-            BigDecimal discount = new BigDecimal(customer.getDiscountLev()).multiply(
-                    total.divide(new BigDecimal("100")));
-            total = total.subtract(discount);
-        }
-        return total;
     }
 
     public List<ShoppingCart> getShoppingCartsForDate(Calendar date) {
@@ -59,11 +68,11 @@ public class ShoppingCartService {
         return dailyShoppingCarts;
     }
 
-    public BigDecimal getDailyTotal(Calendar date) {
+    public BigDecimal getDailyTotal(Calendar date) throws Exception {
         List<ShoppingCart> shoppingCarts = getShoppingCartsForDate(date);
         BigDecimal total = new BigDecimal("0.00");
         for (ShoppingCart shoppingCart : shoppingCarts) {
-            total = total.add(shoppingCart.getTotal());
+            total = total.add(ShoppingCartService.getTotal(shoppingCart.getProductList(), shoppingCart.getCustomer()));
         }
         return total;
     }

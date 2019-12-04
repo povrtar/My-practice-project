@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -32,16 +33,15 @@ public class LogoutController {
     private Logger logger = LogManager.getLogger(LogoutController.class);
 
     @RequestMapping(value = "/submit", method = RequestMethod.GET)
-    public String submit(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-        String name = getLoggedInUserName(model);
+    public String submit(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap model)
+            throws Exception {
+        String name = (String) session.getAttribute("name");
+        logger.info("In submit customer name is" + name);
         if (name != null) {
-            productList.addAll(service.getProductList());
-            logger.info("product list= " + productList);
-            shoppingCartService.addShoppingCart(productList, name);
+            shoppingCartService.addShoppingCart(service.getProductList(name), name);
         }
         productList.clear();
-        logger.info("Total = " + shoppingCartService.getTotal(service.getProductList()));
-        service.cleanProductList();
+        service.cleanProductList(name);
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
         if (authentication != null) {
@@ -52,7 +52,8 @@ public class LogoutController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-        service.cleanProductList();
+        String name = getLoggedInUserName(model);
+        service.cleanProductList(name);
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
         if (authentication != null) {

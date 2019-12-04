@@ -18,7 +18,7 @@ public class ShoppingCartController {
     Calendar date = Calendar.getInstance();
 
     @GetMapping("/managerPage")
-    public String getManagerData(Model model) {
+    public String getManagerData(Model model) throws Exception {
         model.addAttribute("dailyTotal", shoppingCartService.getDailyTotal(date));
         model.addAttribute("dailyPizzas", shoppingCartService.howManyPizzasForDate(date));
         return "manager-page";
