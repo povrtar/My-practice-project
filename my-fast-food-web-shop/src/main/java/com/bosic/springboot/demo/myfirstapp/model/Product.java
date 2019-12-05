@@ -1,6 +1,6 @@
 package com.bosic.springboot.demo.myfirstapp.model;
 
-public abstract class Product {
+public class Product {
 
     protected String type;
     protected String size;

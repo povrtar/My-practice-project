@@ -74,7 +74,7 @@ public class OrderController {
         return "redirect:/orders";
     }
 
-    @GetMapping("/delete-prod")
+    @PostMapping("/delete-prod")
     public String deleteProduct(ModelMap model, @RequestParam String type) throws Exception {
         service.deleteProduct(type, getLoggedInUserName(model));
         return "redirect:/orders";
