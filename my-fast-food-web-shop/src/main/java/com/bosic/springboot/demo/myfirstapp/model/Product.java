@@ -1,5 +1,8 @@
 package com.bosic.springboot.demo.myfirstapp.model;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Product {
 
     protected String type;

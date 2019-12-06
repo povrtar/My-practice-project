@@ -6,13 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.bosic.springboot.demo.myfirstapp.controller.ObjectNotFoundException;
 import com.bosic.springboot.demo.myfirstapp.model.Customer;
-import com.bosic.springboot.demo.myfirstapp.model.Drink;
 import com.bosic.springboot.demo.myfirstapp.model.Pizza;
 import com.bosic.springboot.demo.myfirstapp.model.Product;
 
@@ -22,6 +23,7 @@ public class ProductService {
     Environment env;
     @Autowired
     CustomerService customerService;
+    Logger logger = LoggerFactory.getLogger(getClass());
     private static Map<Customer, List<Product>> mapCustomerWithList = new ConcurrentHashMap<>();
 
     public List<? extends Product> getProductList(String name) {
@@ -43,14 +45,13 @@ public class ProductService {
             throw ObjectNotFoundException.createWith(requestProduct.getClass()
                                                                    .toString());
         } else {
-            product = requestProduct;
             if (product instanceof Pizza) {
-                product.setPrice(getPrice("pizza" + (((Pizza) product).getSize())));
-            }
-            if (product instanceof Drink) {
+                logger.info("product type in addProduct(Pizza) " + "pizza" + product.getSize());
+                product.setPrice(getPrice("pizza" + product.getSize()));
+            } else {
                 product.setPrice(getPrice(product.getType()));
             }
-
+            logger.info("product type in addProduct(Drink" + product.getType());
             list.add(product);
             mapCustomerWithList.put(customer, list);
         }
