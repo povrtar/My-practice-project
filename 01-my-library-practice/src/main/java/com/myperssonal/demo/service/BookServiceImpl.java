@@ -44,11 +44,18 @@ public class BookServiceImpl implements BookService {
         return bookDao.getBooksByAutor(lastName);
     }
 
+    @Override
     public boolean isComplete(Book theBook) {
         if (theBook.getTitle() == null || theBook.getAutorFirstName() == null || theBook.getAutorLastName() == null
                 || theBook.getUnitStrength() == 0) {
             return false;
         } else
             return true;
+    }
+
+    @Override
+    public List<Book> getBooks() {
+        bookDao.getBooks();
+        return null;
     }
 }

@@ -13,34 +13,55 @@ import org.springframework.web.util.WebUtils;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    /** Provides handling for exceptions throughout this service. */
-    @ExceptionHandler({ObjectNotFoundException.class, IncompleteDetailsException.class})
+    @ExceptionHandler({CustomerNotFoundException.class, IncompleteProductDetailsException.class})
     public final ResponseEntity<ApiError> handleException(Exception ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
 
-        if (ex instanceof ObjectNotFoundException) {
+        if (ex instanceof CustomerNotFoundException) {
             HttpStatus status = HttpStatus.NOT_FOUND;
-            ObjectNotFoundException unfe = (ObjectNotFoundException) ex;
+            CustomerNotFoundException unfe = (CustomerNotFoundException) ex;
             return handleCustomerNotFoundException(unfe, headers, status, request);
         }
-
-        if (ex instanceof IncompleteDetailsException) {
+        if (ex instanceof ProductNotFoundException) {
             HttpStatus status = HttpStatus.NOT_FOUND;
-            IncompleteDetailsException ide = (IncompleteDetailsException) ex;
-            return handleIncompleteDetailsException(ide, headers, status, request);
+            ProductNotFoundException pnfe = (ProductNotFoundException) ex;
+            return handleProductNotFoundException(pnfe, headers, status, request);
+        }
+        if (ex instanceof IncompleteProductDetailsException) {
+            HttpStatus status = HttpStatus.NOT_FOUND;
+            IncompleteProductDetailsException ipde = (IncompleteProductDetailsException) ex;
+            return handleIncompleteDetailsException(ipde, headers, status, request);
+        }
+        if (ex instanceof IncompleteCustomerDetailsException) {
+            HttpStatus status = HttpStatus.NOT_FOUND;
+            IncompleteCustomerDetailsException icde = (IncompleteCustomerDetailsException) ex;
+            return handleIncompleteCustomerDetailsException(icde, headers, status, request);
         }
 
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         return handleExceptionInternal(ex, null, headers, status, request);
     }
 
-    protected ResponseEntity<ApiError> handleCustomerNotFoundException(ObjectNotFoundException ex,
+    private ResponseEntity<ApiError> handleIncompleteCustomerDetailsException(IncompleteCustomerDetailsException ex,
+            HttpHeaders headers, HttpStatus status, WebRequest request) {
+        List<String> errorMessages = Collections.singletonList(ex.getMessage());
+
+        return handleExceptionInternal(ex, new ApiError(errorMessages), headers, status, request);
+    }
+
+    private ResponseEntity<ApiError> handleProductNotFoundException(ProductNotFoundException pnfe, HttpHeaders headers,
+            HttpStatus status, WebRequest request) {
+        List<String> errors = Collections.singletonList(pnfe.getMessage());
+        return handleExceptionInternal(pnfe, new ApiError(errors), headers, status, request);
+    }
+
+    protected ResponseEntity<ApiError> handleCustomerNotFoundException(CustomerNotFoundException ex,
             HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return handleExceptionInternal(ex, new ApiError(errors), headers, status, request);
     }
 
-    protected ResponseEntity<ApiError> handleIncompleteDetailsException(IncompleteDetailsException ex,
+    protected ResponseEntity<ApiError> handleIncompleteDetailsException(IncompleteProductDetailsException ex,
             HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<String> errorMessages = Collections.singletonList(ex.getMessage());
 

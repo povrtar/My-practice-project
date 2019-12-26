@@ -11,7 +11,7 @@ import org.h2.mvstore.ConcurrentArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bosic.springboot.demo.myfirstapp.controller.ObjectNotFoundException;
+import com.bosic.springboot.demo.myfirstapp.controller.CustomerNotFoundException;
 import com.bosic.springboot.demo.myfirstapp.model.Customer;
 import com.bosic.springboot.demo.myfirstapp.model.Pizza;
 import com.bosic.springboot.demo.myfirstapp.model.Product;
@@ -32,8 +32,7 @@ public class ShoppingCartService {
             list.addAll(theList);
         }
         if (customer == null) {
-            throw ObjectNotFoundException.createWith(Customer.class.getName()
-                                                                   .toString());
+            throw new CustomerNotFoundException();
         } else if (!(list.isEmpty())) {
             for (Product prod : list) {
                 total = total.add(new BigDecimal(prod.getPrice()));

@@ -13,12 +13,12 @@ import com.myperssonal.demo.entity.BorrowBook;
 import com.myperssonal.demo.service.BorrowService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/borrow")
 public class BorrowController {
     @Autowired
     BorrowService borrowService;
 
-    @PostMapping("/borrow")
+    @PostMapping("/")
     public void borrowBook(@RequestBody BorrowBook theBorrow) {
         if (theBorrow.getBookId() == 0 || theBorrow.getCustomerId() == 0) {
             throw new RuntimeException("Inputed parameters can't be 0 !!!");
@@ -33,7 +33,7 @@ public class BorrowController {
             throw new RuntimeException("Some incorect parameters");
     }
 
-    @DeleteMapping("/borrow")
+    @DeleteMapping("/")
     public void reverseBook(@RequestBody BorrowBook bb) {
 
         borrowService.reverseBook(bb);

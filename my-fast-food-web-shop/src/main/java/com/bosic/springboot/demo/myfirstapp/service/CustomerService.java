@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.bosic.springboot.demo.myfirstapp.controller.IncompleteDetailsException;
-import com.bosic.springboot.demo.myfirstapp.controller.ObjectNotFoundException;
+import com.bosic.springboot.demo.myfirstapp.controller.CustomerNotFoundException;
+import com.bosic.springboot.demo.myfirstapp.controller.IncompleteProductDetailsException;
 import com.bosic.springboot.demo.myfirstapp.model.Customer;
 
 @Service
@@ -21,16 +21,15 @@ public class CustomerService {
         customerList.add(new Customer("Dragana", "Bosic", "dragana1708", "USER", 20));
     }
 
-    public void addCustomer(Customer customer) throws IncompleteDetailsException {
+    public void addCustomer(Customer customer) throws IncompleteProductDetailsException {
         if (!customerHasRequiredFields(customer)) {
-            throw IncompleteDetailsException.createWith(customer.getClass()
-                                                                .toString());
+            throw new IncompleteProductDetailsException();
         }
         customerList.add(new Customer(customer.getFirstName(), customer.getLastName(), customer.getPassword(), "USER",
                 customer.getDiscountLev()));
     }
 
-    public Customer getCustomerByName(String name) throws ObjectNotFoundException {
+    public Customer getCustomerByName(String name) throws CustomerNotFoundException {
         Iterator<Customer> iterator = customerList.iterator();
         while (iterator.hasNext()) {
             Customer customer = iterator.next();
@@ -39,7 +38,6 @@ public class CustomerService {
                 return customer;
             }
         }
-        ObjectNotFoundException.createWith(name);
         return null;
     }
 

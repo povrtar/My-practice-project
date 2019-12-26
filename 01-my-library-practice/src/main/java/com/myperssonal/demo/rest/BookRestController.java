@@ -3,12 +3,8 @@ package com.myperssonal.demo.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,12 +12,19 @@ import com.myperssonal.demo.entity.Book;
 import com.myperssonal.demo.service.BookService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/books")
 public class BookRestController {
     @Autowired
-    BookService bookService;
+    private BookService bookService;
 
-    @GetMapping("/books/{bookId}")
+    @GetMapping("")
+    public List<Book> getBooks() {
+
+        List<Book> books = bookService.getBooks();
+        return books;
+    }
+
+    @GetMapping("/{bookId}")
     public Book getBook(@PathVariable String bookId) {
         int id = Integer.valueOf(bookId);
         Book theBook = bookService.getBook(id);
@@ -31,7 +34,7 @@ public class BookRestController {
         return theBook;
     }
 
-    @GetMapping("/books/bytitle/{title}")
+    @GetMapping("/bytitle/{title}")
     public List<Book> getBooksByTitle(@PathVariable String title) {
         List<Book> theBooks = bookService.getBooksByTitle(title);
         if (theBooks.size() == 0) {
@@ -40,41 +43,7 @@ public class BookRestController {
         return theBooks;
     }
 
-    @PostMapping("/service/books")
-    public Book saveBook(@RequestBody Book theBook) {
-        theBook.setId(0);
-        if (bookService.isComplete(theBook)) {
-            bookService.saveBook(theBook);
-
-        } else {
-            throw new RuntimeException("The Book details are incomplete!!");
-        }
-        return theBook;
-    }
-
-    @PutMapping("/service/books")
-    public Book updateBook(@RequestBody Book theBook) {
-        if (bookService.isComplete(theBook)) {
-            bookService.saveBook(theBook);
-        } else {
-            throw new RuntimeException("The Book details are incomplete!!");
-        }
-        return theBook;
-    }
-
-    @DeleteMapping("/service/books/{bookId}")
-    public Book deleteBook(@PathVariable String title) {
-        int id = Integer.valueOf(title);
-        Book theBook = bookService.getBook(id);
-        if (theBook == null) {
-            throw new EntityNotFoundException("Book not founded for id: " + id);
-        } else {
-            bookService.deleteBook(id);
-        }
-        return theBook;
-    }
-
-    @GetMapping("/books/byautor/{lastName}")
+    @GetMapping("/byautor/{lastName}")
     public List<Book> getBooksByAutor(@PathVariable String lastName) {
         List<Book> theBooks = bookService.getBooksByAutor(lastName);
         if (theBooks.size() == 0) {

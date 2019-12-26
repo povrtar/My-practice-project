@@ -1,6 +1,5 @@
 package com.bosic.springboot.demo.myfirstapp.controller;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -21,6 +22,7 @@ import com.bosic.springboot.demo.myfirstapp.service.ProductService;
 import com.bosic.springboot.demo.myfirstapp.service.ShoppingCartService;
 
 @Controller
+@RequestMapping("/orders")
 @SessionAttributes("name")
 public class OrderController {
 
@@ -28,13 +30,6 @@ public class OrderController {
     private ProductService service;
     @Autowired
     private CustomerService customerService;
-
-    @GetMapping("/")
-    public String logControl(ModelMap model, HttpSession session) {
-        model.addAttribute("name", getLoggedInUserName(model));
-        session.setAttribute("name", getLoggedInUserName(model));
-        return "welcome";
-    }
 
     @GetMapping("/orders")
     public String mainOrderPage(ModelMap model) throws Exception {
@@ -45,7 +40,7 @@ public class OrderController {
         return "order-page";
     }
 
-    @GetMapping("/add-order/pizzas")
+    @GetMapping("/orders/pizzas")
     public String addPizza(ModelMap model) {
         model.addAttribute("product", new Pizza());
         return "pizza";
@@ -74,13 +69,13 @@ public class OrderController {
         return "redirect:/orders";
     }
 
-    @PostMapping("/delete-prod")
+    @DeleteMapping("/delete-prod")
     public String deleteProduct(ModelMap model, @RequestParam String type) throws Exception {
         service.deleteProduct(type, getLoggedInUserName(model));
         return "redirect:/orders";
     }
 
-    private String getLoggedInUserName(ModelMap model) {
+    public static String getLoggedInUserName(ModelMap model) {
         Object principal = SecurityContextHolder.getContext()
                                                 .getAuthentication()
                                                 .getPrincipal();

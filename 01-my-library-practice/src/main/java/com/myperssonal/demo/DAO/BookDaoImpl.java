@@ -70,4 +70,12 @@ public class BookDaoImpl implements BookDAO {
         return booksOfAutor;
     }
 
+    @Override
+    public List<Book> getBooks() {
+        Session currentSession = theEntityManager.unwrap(Session.class);
+        Query<Book> theQuery = currentSession.createQuery("from Book order", Book.class);
+        List<Book> books = theQuery.getResultList();
+        return books;
+    }
+
 }
