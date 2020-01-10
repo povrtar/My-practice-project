@@ -1,12 +1,12 @@
 import java.util.concurrent.TimeUnit;
 
 public class GasPump {
-    public volatile boolean blocked = false;
+    private volatile boolean blocked = false;
     private volatile int balance;
     private final int pumpId;
 
-    public GasPump(int id, int balance) {
-        pumpId = id;
+    public GasPump(int pumpId, int balance) {
+        this.pumpId = pumpId;
         this.balance = balance;
     }
 
